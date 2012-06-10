@@ -1,0 +1,27 @@
+OASISFormat:	0.3
+Name:		ocaml-bitlib
+Version:	0.1
+Synopsis:	Bitstring and related structures
+Authors:	Petter A. Urkedal
+License:	LGPL-3 with OCaml linking exception
+Plugins:	META (0.3)
+BuildTools:	ocamlbuild
+
+Library bitlib
+  Path:		src
+  Modules:	Bitlib_prereq, Bitstring
+  CSources:	prereq.h, bitstring.h, bitstring_stubs.c
+  CCOpt:	-I../src -Wall -g -O2
+  Modules:	Bitstring
+
+Executable test_bitstring
+  Install:	false
+  Path:		tests
+  MainIs:	test_bitstring.ml
+  BuildDepends:	bitlib
+  DllPath:	_build/src
+  CompiledObject: byte
+
+Test "main"
+  Type: Custom (0.3)
+  Command: $test_bitstring
