@@ -14,14 +14,14 @@ Library bitlib
   CCOpt:	-I../src -Wall -g -O2
   Modules:	Bitstring
 
-Executable test_bitstring
+Executable testsuite
   Install:	false
   Path:		tests
-  MainIs:	test_bitstring.ml
-  BuildDepends:	bitlib
+  MainIs:	testsuite.ml
+  BuildDepends:	bitlib, oUnit
   DllPath:	_build/src
-  CompiledObject: byte
 
 Test "main"
   Type: Custom (0.3)
-  Command: $test_bitstring
+  Command: $testsuite
+  PostCommand: echo

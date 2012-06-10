@@ -32,7 +32,7 @@ let bool_array_get16 i data =
 	loop (j - 1) (2 * x + bit) in
     loop 15 0
 
-let test () =
+let test_one () =
     let data = Array.init maxdim (fun i -> Random.bool ()) in
     let n = Random.int 256 in
     let bs = Bitstring.init n (fun i -> Array.get data i) in
@@ -115,5 +115,4 @@ let test () =
     let bsC' = Bitstring.prefix nC bsB in
     assert (Bitstring.equal bsC bsC')
 
-let () =
-    for i = 0 to 1000 do test () done
+let test () = for i = 0 to 1999 do test_one () done
