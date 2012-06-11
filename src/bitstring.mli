@@ -35,6 +35,10 @@ external get16 : int -> t -> int = "bitlib_bitstring_get16"
 external compare : t -> t -> int = "bitlib_bitstring_compare"
 val equal : t -> t -> bool
 
+external slice : int -> int -> t -> t = "bitlib_bitstring_slice"
+val prefix : int -> t -> t
+val suffix : int -> t -> t
+
 val has_prefix : t -> t -> bool
 
 external coprefix_length : t -> t -> int = "bitlib_bitstring_coprefix_length"
@@ -42,8 +46,6 @@ val coprefix : t -> t -> t
 external coslice_length : int -> t -> int -> t -> int
     = "bitlib_bitstring_coslice_length"
 
-val prefix : int -> t -> t
-external slice : int -> int -> t -> t = "bitlib_bitstring_slice"
 external cat : t -> t -> t = "bitlib_bitstring_cat"
 
 val map : (bool -> bool) -> t -> t

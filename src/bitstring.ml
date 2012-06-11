@@ -38,12 +38,14 @@ external get16 : int -> t -> int = "bitlib_bitstring_get16"
 external compare : t -> t -> int = "bitlib_bitstring_compare"
 let equal sA sB = compare sA sB = 0
 
+external slice : int -> int -> t -> t = "bitlib_bitstring_slice"
+let prefix = slice 0
+let suffix i s = slice i (length s) s
+
 external coprefix_length : t -> t -> int = "bitlib_bitstring_coprefix_length"
 external coslice_length : int -> t -> int -> t -> int
     = "bitlib_bitstring_coslice_length"
 
-external slice : int -> int -> t -> t = "bitlib_bitstring_slice"
-let prefix = slice 0
 external cat : t -> t -> t = "bitlib_bitstring_cat"
 
 let coprefix sA sB = slice 0 (coprefix_length sA sB) sA

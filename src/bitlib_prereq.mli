@@ -14,6 +14,10 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *)
 
+val ident : 'a -> 'a
+val konst : 'a -> 'b -> 'a
+val ( |< ) : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
+
 module String : sig
     include module type of String
 

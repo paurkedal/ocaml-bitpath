@@ -14,6 +14,10 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *)
 
+let ident x = x
+let konst x y = x
+let ( |< ) f g x = f (g x)
+
 module String = struct
     include String
 
