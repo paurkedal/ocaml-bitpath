@@ -9,7 +9,7 @@ BuildTools:	ocamlbuild
 
 Library bitlib
   Path:		src
-  Modules:	Bitlib_prereq, Bitstring, Prefixset
+  Modules:	Bitlib_prereq, Bitstring, Prefixset, Prefixmap
   CSources:	prereq.h, bitstring.h, bitstring_stubs.c
   CCOpt:	-I../src -Wall -g -O2
 
