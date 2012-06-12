@@ -39,7 +39,9 @@ external slice : int -> int -> t -> t = "bitlib_bitstring_slice"
 val prefix : int -> t -> t
 val suffix : int -> t -> t
 
+val has_slice : t -> int -> t -> bool
 val has_prefix : t -> t -> bool
+val has_suffix : t -> t -> bool
 
 external coprefix_length : t -> t -> int = "bitlib_bitstring_coprefix_length"
 val coprefix : t -> t -> t

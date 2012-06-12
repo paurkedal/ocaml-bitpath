@@ -52,6 +52,12 @@ let coprefix sA sB = slice 0 (coprefix_length sA sB) sA
 
 let has_prefix sP s = coprefix_length sP s = length sP
 
+let has_suffix sS s =
+    let nS, n = length sS, length s in
+    n >= nS && coslice_length 0 sS (length s - nS) s = nS
+
+let has_slice sS i s = coslice_length 0 sS i s = length sS
+
 let map f s = init (length s) (fun i -> f (get i s))
 
 let mapi f s = init (length s) (fun i -> f i (get i s))
