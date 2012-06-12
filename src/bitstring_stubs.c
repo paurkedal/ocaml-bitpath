@@ -268,6 +268,7 @@ bitlib_bitstring_init16(value n_v, value f_v)
     CAMLreturn (s_v);
 }
 
+#include <stdio.h>
 value
 bitlib_bitstring_const(value n_v, value x_v)
 {
@@ -291,6 +292,27 @@ bitlib_bitstring_const(value n_v, value x_v)
 	BITSTRING(s_v)->arr[i] = x;
     BITSTRING(s_v)->arr[m - 1] = x << (WORD_WIDTH - 1 - (n - 1) % WORD_WIDTH);
     CAMLreturn (s_v);
+}
+
+value
+bitlib_bitstring_not(value sA_v)
+{
+    CAMLparam1 (sA_v);
+    CAMLlocal1 (sN_v);
+    size_t i, n, m;
+    n = BITSTRING(sA_v)->len;
+    if (n == 0) {
+	assert(_bitstring_empty != Val_unit);
+	CAMLreturn (_bitstring_empty);
+    }
+    m = WORD_CNT(n);
+    sN_v = _bitstring_alloc(m);
+    BITSTRING(sN_v)->len = n;
+    for (i = 0; i < m - 1; ++i)
+	BITSTRING(sN_v)->arr[i] = ~BITSTRING(sA_v)->arr[i];
+    BITSTRING(sN_v)->arr[m - 1] = ~BITSTRING(sA_v)->arr[m - 1]
+	    & (~BITLIB_WORD_C(0) << (WORD_WIDTH - 1 - (n - 1) % WORD_WIDTH));
+    CAMLreturn (sN_v);
 }
 
 value

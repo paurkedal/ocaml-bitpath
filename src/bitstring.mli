@@ -23,6 +23,7 @@ external init8 : int -> (int -> int) -> t = "bitlib_bitstring_init8"
 external init16 : int -> (int -> int) -> t = "bitlib_bitstring_init16"
 
 external const : int -> bool -> t = "bitlib_bitstring_const"
+external bitnot : t -> t = "bitlib_bitstring_not"
 
 external length : t -> int = "bitlib_bitstring_length"
 val length8 : t -> int

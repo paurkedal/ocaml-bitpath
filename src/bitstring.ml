@@ -58,7 +58,14 @@ let has_suffix sS s =
 
 let has_slice sS i s = coslice_length 0 sS i s = length sS
 
-let map f s = init (length s) (fun i -> f (get i s))
+external bitnot : t -> t = "bitlib_bitstring_not"
+
+let map f s =
+    match f false, f true with
+    | false, true -> s
+    | false, false -> const (length s) false
+    | true, true -> const (length s) true
+    | true, false -> bitnot s
 
 let mapi f s = init (length s) (fun i -> f i (get i s))
 
@@ -102,4 +109,6 @@ let of_string str =
 	  | _ -> invalid_arg "Bitstring.of_string" in
     init (String.length str) get_bit
 
-let to_string s = String.init (length s) (fun i -> if get i s then '1' else '0')
+let to_string s =
+    if length s = 0 then "ε" else
+    String.init (length s) (fun i -> if get i s then '1' else '0')

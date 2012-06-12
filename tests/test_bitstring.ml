@@ -16,6 +16,9 @@
 
 open Printf
 open Bitlib_prereq
+open OUnit
+
+let assert_streq = assert_equal ~printer:Bitstring.to_string
 
 let maxdim = 256
 
@@ -43,8 +46,8 @@ let test_one () =
     assert (Bitstring.length bs8 = n / 8 * 8);
     assert (Bitstring.length bs16 = n / 16 * 16);
 
-    assert (Bitstring.init n (konst true) = Bitstring.const n true);
-    assert (Bitstring.init n (konst false) = Bitstring.const n false);
+    assert (Bitstring.bitnot bs = Bitstring.map not bs);
+    assert (Bitstring.bitnot (Bitstring.bitnot bs) = bs);
 
     for i = 0 to n - 1 do
 	assert (Bitstring.get i bs = Array.get data i)
@@ -119,4 +122,13 @@ let test_one () =
     let bsC' = Bitstring.prefix nC bsB in
     assert (Bitstring.equal bsC bsC')
 
-let test () = for i = 0 to 1999 do test_one () done
+let test () =
+    for n = 0 to 500 do
+	assert_streq (Bitstring.init n (konst true)) (Bitstring.const n true);
+	assert_streq (Bitstring.init n (konst false)) (Bitstring.const n false);
+	assert_streq (Bitstring.bitnot (Bitstring.const n true))
+		     (Bitstring.const n false);
+	assert_streq (Bitstring.bitnot (Bitstring.const n false))
+		     (Bitstring.const n true)
+    done;
+    for i = 0 to 1999 do test_one () done
