@@ -15,6 +15,7 @@
  *)
 
 open Printf
+open Bitlib_prereq
 
 let maxdim = 256
 
@@ -41,6 +42,9 @@ let test_one () =
 
     assert (Bitstring.length bs8 = n / 8 * 8);
     assert (Bitstring.length bs16 = n / 16 * 16);
+
+    assert (Bitstring.init n (konst true) = Bitstring.const n true);
+    assert (Bitstring.init n (konst false) = Bitstring.const n false);
 
     for i = 0 to n - 1 do
 	assert (Bitstring.get i bs = Array.get data i)
