@@ -12,7 +12,6 @@ Library bitlib
   Modules:	Bitlib_prereq, Bitstring, Prefixset
   CSources:	prereq.h, bitstring.h, bitstring_stubs.c
   CCOpt:	-I../src -Wall -g -O2
-  Modules:	Bitstring
 
 Executable testsuite
   Install:	false
