@@ -24,7 +24,7 @@ type t
 
 
 (** [length s] is the number of bits contained in [s]. *)
-external length : t -> int = "bitlib_bitstring_length"
+external length : t -> int = "camlbitlib_bitstring_length"
 
 (** [length8 s = ⌈length s / 8⌉]. *)
 val length8 : t -> int
@@ -33,20 +33,20 @@ val length8 : t -> int
 val length16 : t -> int
 
 (** [get i s] is true iff the [i]th bit of [s] is set. *)
-external get : int -> t -> bool = "bitlib_bitstring_get"
+external get : int -> t -> bool = "camlbitlib_bitstring_get"
 
 (** [get8 i s] is the integer with bit number [7 - j] equal to bit number
     [8*i + j] of [s]. *)
-external get8 : int -> t -> int = "bitlib_bitstring_get8"
+external get8 : int -> t -> int = "camlbitlib_bitstring_get8"
 
 (** [get16 i s] is the integer with bit number [15 - j] equal to bit number
     [16*i + j] of [s]. *)
-external get16 : int -> t -> int = "bitlib_bitstring_get16"
+external get16 : int -> t -> int = "camlbitlib_bitstring_get16"
 
 (** [compare sA sB] returns [-1], [0], or [1] when [sA] is less, equal, or
     greater than [sB], respectively, according to lexicographical ordering of
     bits. *)
-external compare : t -> t -> int = "bitlib_bitstring_compare"
+external compare : t -> t -> int = "camlbitlib_bitstring_compare"
 
 (** [equal sA sB] is true iff [sA] and [sB] are bitwise equal. *)
 val equal : t -> t -> bool
@@ -57,25 +57,25 @@ val empty : t
 
 (** [init n f] turns the predicate [f] into a bit-string [s] of length [n]
     such that [f i = get f i] for 0 ≤ [i] < [n]. *)
-external init : int -> (int -> bool) -> t = "bitlib_bitstring_init"
+external init : int -> (int -> bool) -> t = "camlbitlib_bitstring_init"
 
 (** [init8 n f] is the [(8 * n)]-bit string [s] such that [get (8*i + j) s] is
     [true] iff bit number [7 - j] of [f i] is set. *)
-external init8 : int -> (int -> int) -> t = "bitlib_bitstring_init8"
+external init8 : int -> (int -> int) -> t = "camlbitlib_bitstring_init8"
 
 (** [init16 n f] is the [(16 * n)]-bit string [s] such that [get (16*i + j) s]
     is [true] iff bit number [15 - j] of [i i] is set. *)
-external init16 : int -> (int -> int) -> t = "bitlib_bitstring_init16"
+external init16 : int -> (int -> int) -> t = "camlbitlib_bitstring_init16"
 
 (** [const n x] is the [n]-bit string of [x]. *)
-external const : int -> bool -> t = "bitlib_bitstring_const"
+external const : int -> bool -> t = "camlbitlib_bitstring_const"
 
 
 (** [bitnot s] is the string [s'] such that [get i s = not (get i s')]. *)
-external bitnot : t -> t = "bitlib_bitstring_not"
+external bitnot : t -> t = "camlbitlib_bitstring_not"
 
 (** [slice i j s] is the sub-string of bit [i] to [j - 1] of [s]. *)
-external slice : int -> int -> t -> t = "bitlib_bitstring_slice"
+external slice : int -> int -> t -> t = "camlbitlib_bitstring_slice"
 
 (** [prefix i s] is the substring containing the [i] first bits of [s]. *)
 val prefix : int -> t -> t
@@ -96,17 +96,18 @@ val has_suffix : t -> t -> bool
 
 (** [coprefix_length sA sB] is the largest [n] such that
     [get i sA = get i sB] for [i < n]. *)
-external coprefix_length : t -> t -> int = "bitlib_bitstring_coprefix_length"
+external coprefix_length : t -> t -> int
+    = "camlbitlib_bitstring_coprefix_length"
 
 val coprefix : t -> t -> t
 
 (** [coslice_length iA sA iB sB] is the largest [n] such that
     [get (iA + i) sA = get (iB + i) sB] for [i < n]. *)
 external coslice_length : int -> t -> int -> t -> int
-    = "bitlib_bitstring_coslice_length"
+    = "camlbitlib_bitstring_coslice_length"
 
 (** [cat s0 s1] is the concatenation of [s0] and [s1]. *)
-external cat : t -> t -> t = "bitlib_bitstring_cat"
+external cat : t -> t -> t = "camlbitlib_bitstring_cat"
 
 (** Given [s] of length [n], then [map f s] is the [n]-bit string [s'] such
     that [get i s' = f (get i s)] for [0 ≤ i < n]. *)

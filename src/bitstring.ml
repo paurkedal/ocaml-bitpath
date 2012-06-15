@@ -18,35 +18,36 @@ open Bitlib_prereq
 
 type t
 
-external make_empty : unit -> t = "bitlib_bitstring_make_empty"
+external make_empty : unit -> t = "camlbitlib_bitstring_make_empty"
 let empty = make_empty ()
 
-external init : int -> (int -> bool) -> t = "bitlib_bitstring_init"
-external init8 : int -> (int -> int) -> t = "bitlib_bitstring_init8"
-external init16 : int -> (int -> int) -> t = "bitlib_bitstring_init16"
+external init : int -> (int -> bool) -> t = "camlbitlib_bitstring_init"
+external init8 : int -> (int -> int) -> t = "camlbitlib_bitstring_init8"
+external init16 : int -> (int -> int) -> t = "camlbitlib_bitstring_init16"
 
-external const : int -> bool -> t = "bitlib_bitstring_const"
+external const : int -> bool -> t = "camlbitlib_bitstring_const"
 
-external length : t -> int = "bitlib_bitstring_length"
+external length : t -> int = "camlbitlib_bitstring_length"
 let length8 s = let n = length s in (n + 7) / 8
 let length16 s = let n = length s in (n + 15) / 16
 
-external get : int -> t -> bool = "bitlib_bitstring_get"
-external get8 : int -> t -> int = "bitlib_bitstring_get8"
-external get16 : int -> t -> int = "bitlib_bitstring_get16"
+external get : int -> t -> bool = "camlbitlib_bitstring_get"
+external get8 : int -> t -> int = "camlbitlib_bitstring_get8"
+external get16 : int -> t -> int = "camlbitlib_bitstring_get16"
 
-external compare : t -> t -> int = "bitlib_bitstring_compare"
+external compare : t -> t -> int = "camlbitlib_bitstring_compare"
 let equal sA sB = compare sA sB = 0
 
-external slice : int -> int -> t -> t = "bitlib_bitstring_slice"
+external slice : int -> int -> t -> t = "camlbitlib_bitstring_slice"
 let prefix = slice 0
 let suffix i s = slice i (length s) s
 
-external coprefix_length : t -> t -> int = "bitlib_bitstring_coprefix_length"
+external coprefix_length : t -> t -> int
+    = "camlbitlib_bitstring_coprefix_length"
 external coslice_length : int -> t -> int -> t -> int
-    = "bitlib_bitstring_coslice_length"
+    = "camlbitlib_bitstring_coslice_length"
 
-external cat : t -> t -> t = "bitlib_bitstring_cat"
+external cat : t -> t -> t = "camlbitlib_bitstring_cat"
 
 let coprefix sA sB = slice 0 (coprefix_length sA sB) sA
 
@@ -58,7 +59,7 @@ let has_suffix sS s =
 
 let has_slice sS i s = coslice_length 0 sS i s = length sS
 
-external bitnot : t -> t = "bitlib_bitstring_not"
+external bitnot : t -> t = "camlbitlib_bitstring_not"
 
 let map f s =
     match f false, f true with

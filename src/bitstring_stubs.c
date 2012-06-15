@@ -37,7 +37,7 @@
 #define WORD_MOD8(i) ((WORD_SIZE - 1 - (i) % WORD_SIZE) * 8)
 #define WORD_MOD16(i) ((WORD_SZ16 - 1 - (i) % WORD_SZ16) * 16)
 
-#define BITSTRING(v) ((bitlib_bitstring_t)Data_custom_val(v))
+#define BITSTRING BITLIB_BITSTRING
 #define BITSTRING_GET(i, s)  ((s->arr[(i) / WORD_WIDTH] >> WORD_MOD(i)) & 1)
 #define BITSTRING_GET8(i, s) ((s->arr[(i) / WORD_SIZE] >> WORD_MOD8(i)) & 0xff)
 #define BITSTRING_GET16(i, s) \
@@ -69,7 +69,7 @@ _bitstring_compare(value sA_v, value sB_v)
 }
 
 value
-bitlib_bitstring_compare(value sA_v, value sB_v)
+camlbitlib_bitstring_compare(value sA_v, value sB_v)
 {
     return Val_int(_bitstring_compare(sA_v, sB_v));
 }
@@ -157,7 +157,7 @@ _bitstring_alloc(size_t m)
 static value _bitstring_empty = Val_unit;
 
 value
-bitlib_bitstring_make_empty(value _)
+camlbitlib_bitstring_make_empty(value _)
 {
     assert(_bitstring_empty == Val_unit);
     caml_register_global_root(&_bitstring_empty);
@@ -167,7 +167,7 @@ bitlib_bitstring_make_empty(value _)
 }
 
 value
-bitlib_bitstring_init(value n_v, value f_v)
+camlbitlib_bitstring_init(value n_v, value f_v)
 {
     CAMLparam2 (n_v, f_v);
     CAMLlocal1 (s_v);
@@ -201,7 +201,7 @@ bitlib_bitstring_init(value n_v, value f_v)
 }
 
 value
-bitlib_bitstring_init8(value n_v, value f_v)
+camlbitlib_bitstring_init8(value n_v, value f_v)
 {
     CAMLparam2 (n_v, f_v);
     CAMLlocal1 (s_v);
@@ -235,7 +235,7 @@ bitlib_bitstring_init8(value n_v, value f_v)
 }
 
 value
-bitlib_bitstring_init16(value n_v, value f_v)
+camlbitlib_bitstring_init16(value n_v, value f_v)
 {
     CAMLparam2 (n_v, f_v);
     CAMLlocal1 (s_v);
@@ -270,7 +270,7 @@ bitlib_bitstring_init16(value n_v, value f_v)
 
 #include <stdio.h>
 value
-bitlib_bitstring_const(value n_v, value x_v)
+camlbitlib_bitstring_const(value n_v, value x_v)
 {
     CAMLparam2 (n_v, x_v);
     CAMLlocal1 (s_v);
@@ -295,7 +295,7 @@ bitlib_bitstring_const(value n_v, value x_v)
 }
 
 value
-bitlib_bitstring_not(value sA_v)
+camlbitlib_bitstring_not(value sA_v)
 {
     CAMLparam1 (sA_v);
     CAMLlocal1 (sN_v);
@@ -316,34 +316,34 @@ bitlib_bitstring_not(value sA_v)
 }
 
 value
-bitlib_bitstring_length(value s_v)
+camlbitlib_bitstring_length(value s_v)
 {
     return Val_long(BITSTRING(s_v)->len);
 }
 
 value
-bitlib_bitstring_get(value i_v, value s_v)
+camlbitlib_bitstring_get(value i_v, value s_v)
 {
     size_t i = Long_val(i_v);
     return Val_bool(BITSTRING_GET(i, BITSTRING(s_v)));
 }
 
 value
-bitlib_bitstring_get8(value i_v, value s_v)
+camlbitlib_bitstring_get8(value i_v, value s_v)
 {
     size_t i = Long_val(i_v);
     return Val_int(BITSTRING_GET8(i, BITSTRING(s_v)));
 }
 
 value
-bitlib_bitstring_get16(value i_v, value s_v)
+camlbitlib_bitstring_get16(value i_v, value s_v)
 {
     size_t i = Long_val(i_v);
     return Val_int(BITSTRING_GET16(i, BITSTRING(s_v)));
 }
 
 value
-bitlib_bitstring_coprefix_length(value sA_v, value sB_v)
+camlbitlib_bitstring_coprefix_length(value sA_v, value sB_v)
 {
     size_t i, n = MIN(BITSTRING(sA_v)->len, BITSTRING(sB_v)->len);
     size_t j, m = n / WORD_WIDTH;
@@ -358,7 +358,7 @@ bitlib_bitstring_coprefix_length(value sA_v, value sB_v)
 }
 
 value
-bitlib_bitstring_coslice_length(value iA_v, value sA_v, value iB_v, value sB_v)
+camlbitlib_bitstring_coslice_length(value iA_v, value sA_v, value iB_v, value sB_v)
 {
     size_t iA = Long_val(iA_v);
     size_t iB = Long_val(iB_v);
@@ -373,7 +373,7 @@ bitlib_bitstring_coslice_length(value iA_v, value sA_v, value iB_v, value sB_v)
 }
 
 value
-bitlib_bitstring_slice(value iL_v, value iU_v, value sA_v)
+camlbitlib_bitstring_slice(value iL_v, value iU_v, value sA_v)
 {
     CAMLparam3 (sA_v, iL_v, iU_v);
     CAMLlocal1 (s_v);
@@ -425,7 +425,7 @@ bitlib_bitstring_slice(value iL_v, value iU_v, value sA_v)
 }
 
 value
-bitlib_bitstring_cat(value sA_v, value sB_v)
+camlbitlib_bitstring_cat(value sA_v, value sB_v)
 {
     CAMLparam2 (sA_v, sB_v);
     CAMLlocal1 (s_v);

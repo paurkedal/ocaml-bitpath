@@ -12,6 +12,9 @@ Library bitlib
   Modules:	Bitlib_prereq, Bitstring, Prefixset, Prefixmap
   CSources:	prereq.h, bitstring.h, bitstring_stubs.c
   CCOpt:	-I../src -Wall -g -O2
+  DataFiles:
+    prereq.h ($prefix/include/bitlib),
+    bitstring.h ($prefix/include/bitlib)
 
 Document bitlib
   Title:	Bitlib Reference

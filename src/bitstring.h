@@ -33,6 +33,7 @@ BITLIB_BEGIN_DECLS
 #    define BITLIB_WORD_WIDTH 32
 #  endif
 #endif
+#define BITLIB_WORD_SIZE (BITLIB_WORD_WIDTH / 8)
 
 #if BITLIB_WORD_WIDTH == 64
 typedef uint64_t bitlib_word_t;
@@ -53,6 +54,17 @@ struct bitlib_bitstring
     bitlib_word_t *arr;
 #endif
 };
+
+#define BITLIB_BITSTRING(v) ((bitlib_bitstring_t)Data_custom_val(v))
+
+BITLIB_SINLINE size_t bitlib_bitstring_length(bitlib_bitstring_t s)
+{ return s->len; }
+
+BITLIB_SINLINE bitlib_word_t *bitlib_bitstring_array(bitlib_bitstring_t s)
+{ return s->arr; }
+
+BITLIB_SINLINE size_t bitlib_bitstring_array_length(bitlib_bitstring_t s)
+{ return (s->len + BITLIB_WORD_WIDTH - 1) / BITLIB_WORD_WIDTH; }
 
 BITLIB_END_DECLS
 

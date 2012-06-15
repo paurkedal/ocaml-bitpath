@@ -25,4 +25,6 @@
 #  define BITLIB_END_DECLS
 #endif
 
+#define BITLIB_SINLINE static inline
+
 #endif
