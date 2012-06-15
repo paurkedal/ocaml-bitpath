@@ -13,6 +13,15 @@ Library bitlib
   CSources:	prereq.h, bitstring.h, bitstring_stubs.c
   CCOpt:	-I../src -Wall -g -O2
 
+Document bitlib
+  Title:	Bitlib Reference
+  Type:		ocamlbuild (0.3)
+  InstallDir:	$htmldir/html
+  BuildTools+:	ocamldoc
+  XOCamlbuildPath: src
+  XOCamlbuildLibraries: bitlib
+  DataFiles:	COPYING ($docdir), COPYING.LESSER ($docdir), README.mkd ($docdir)
+
 Executable testsuite
   Install:	false
   Path:		tests

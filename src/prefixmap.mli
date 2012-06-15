@@ -14,11 +14,25 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *)
 
+(** The [Prefixmap] implements a mappings from sets of infinite bit-strings,
+    representable by a finite set of common prefixes.  In other words, the
+    domain has the same structure as the sets modelled by [Prefixset].  Both
+    polymorphic and a functor variants are provided to abstract over the
+    codomain, though the former only contains the part of the API which do not
+    depend on equality. *)
+
+(** The signature for types with an equality predicate. *)
 module type Equatable = sig
     type t
     val equal : t -> t -> bool
 end
 
+(** The polymorphic API to prefix-maps contains the subset of the operations
+    which do not depend on equality on the codomain.  Note that the API is
+    really incomplete, and must be combined with the functor API.  This is
+    made possible by the type equality [Make(C).t = C.t Poly.t].  The purpose
+    of this module is to allow writing polymorphic functions acting on
+    pre-constructed maps. *)
 module Poly : sig
 
     type prefix = Bitstring.t
@@ -49,6 +63,8 @@ module Poly : sig
     val iteri : (prefix -> 'a -> unit) -> 'a t -> unit
 end
 
+(** A functor which implements the full API of prefix-maps, given an equatable
+    type for the codomain. *)
 module Make (C : Equatable) : sig
 
     type prefix = Bitstring.t
