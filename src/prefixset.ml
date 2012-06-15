@@ -107,6 +107,13 @@ let rec zoom pG s =
 	    Bot in
     loop 0 s
 
+let rec disjoint sA sB = match sA, sB with
+  | Bot, _ | _, Bot -> true
+  | Top, _ | _, Top -> false
+  | Y (sA0, sA1), Y (sB0, sB1) -> disjoint sA0 sB0 && disjoint sA1 sB1
+  | P (pA, sAI), _ -> disjoint sAI (zoom pA sB)
+  | _, P (pB, sBI) -> disjoint (zoom pB sA) sBI
+
 let rec modify pG f s =
     let nG = Bitstring.length pG in
     let rec loop iG s =

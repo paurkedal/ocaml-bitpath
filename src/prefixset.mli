@@ -32,6 +32,9 @@ type t
 (** [equal sA sB] is true iff [sA] and [sB] contain the same members. *)
 val equal : t -> t -> bool
 
+(** [disjoint sA sB] is true iff [sA ∩ sB] is the empty set. *)
+val disjoint : t -> t -> bool
+
 (** The empty set. *)
 val empty : t
 
