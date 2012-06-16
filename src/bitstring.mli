@@ -59,12 +59,16 @@ val empty : t
     such that [f i = get f i] for 0 ≤ [i] < [n]. *)
 external init : int -> (int -> bool) -> t = "camlbitlib_bitstring_init"
 
-(** [init8 n f] is the [(8 * n)]-bit string [s] such that [get (8*i + j) s] is
-    [true] iff bit number [7 - j] of [f i] is set. *)
+(** [init8 n f] is the [n]-bit string [s] such that [get (8*i + j) s] is
+    [true] iff bit number [7 - j] of [f i] is set.  If [n] is not a multiple
+    of [8], then the [n mod 8] most significant bits of [f (n / 8)] are used;
+    the rest are ignored.  *)
 external init8 : int -> (int -> int) -> t = "camlbitlib_bitstring_init8"
 
-(** [init16 n f] is the [(16 * n)]-bit string [s] such that [get (16*i + j) s]
-    is [true] iff bit number [15 - j] of [i i] is set. *)
+(** [init16 n f] is the [n]-bit string [s] such that [get (16*i + j) s] is
+    [true] iff bit number [15 - j] of [f i] is set.  If [n] is not a multiple
+    of [16], then the [n mod 16] most significant bits of [f (n / 16)] are
+    used; the rest are ignored. *)
 external init16 : int -> (int -> int) -> t = "camlbitlib_bitstring_init16"
 
 (** [const n x] is the [n]-bit string of [x]. *)

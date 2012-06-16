@@ -206,11 +206,11 @@ camlbitlib_bitstring_init8(value n_v, value f_v)
     CAMLparam2 (n_v, f_v);
     CAMLlocal1 (s_v);
     size_t i, j, n = Long_val(n_v);
-    size_t m0 = n / WORD_SIZE;
-    size_t m = WORD_CNT(n * 8);
+    size_t m0 = n / WORD_WIDTH;
+    size_t m = WORD_CNT(n);
 
     s_v = _bitstring_alloc(m);
-    BITSTRING(s_v)->len = n * 8;
+    BITSTRING(s_v)->len = n;
     if (!BITSTRING(s_v)->arr)
 	caml_raise_out_of_memory();
     for (i = 0; i < m0; ++i) {
@@ -224,12 +224,14 @@ camlbitlib_bitstring_init8(value n_v, value f_v)
     }
     if (m0 < m) {
 	bitlib_word_t w = 0;
-	for (j = 0; j < n % WORD_SIZE; ++j) {
+	int n_oct = (n % WORD_WIDTH + 7) / 8;
+	for (j = 0; j < n_oct; ++j) {
 	    int x = Int_val(caml_callback(f_v, Val_long(m0 * WORD_SIZE + j)));
 	    w <<= 8;
 	    w |= x;
 	}
-	BITSTRING(s_v)->arr[m0] = w << (WORD_SIZE - n % WORD_SIZE)*8;
+	w >>= n_oct * 8 - n % WORD_WIDTH;
+	BITSTRING(s_v)->arr[m0] = w << (WORD_WIDTH - 1 - (n - 1) % WORD_WIDTH);
     }
     CAMLreturn (s_v);
 }
@@ -240,11 +242,11 @@ camlbitlib_bitstring_init16(value n_v, value f_v)
     CAMLparam2 (n_v, f_v);
     CAMLlocal1 (s_v);
     size_t i, j, n = Long_val(n_v);
-    size_t m0 = n / WORD_SZ16;
-    size_t m = WORD_CNT(n * 16);
+    size_t m0 = n / WORD_WIDTH;
+    size_t m = WORD_CNT(n);
 
     s_v = _bitstring_alloc(m);
-    BITSTRING(s_v)->len = n * 16;
+    BITSTRING(s_v)->len = n;
     if (!BITSTRING(s_v)->arr)
 	caml_raise_out_of_memory();
     for (i = 0; i < m0; ++i) {
@@ -258,12 +260,14 @@ camlbitlib_bitstring_init16(value n_v, value f_v)
     }
     if (m0 < m) {
 	bitlib_word_t w = 0;
-	for (j = 0; j < n % WORD_SZ16; ++j) {
-	    int x = Int_val(caml_callback(f_v, Val_long(i*WORD_SZ16 + j)));
+	int n_hxd = (n % WORD_WIDTH + 15) / 16;
+	for (j = 0; j < n_hxd; ++j) {
+	    int x = Int_val(caml_callback(f_v, Val_long(m0 * WORD_SZ16 + j)));
 	    w <<= 16;
 	    w |= x;
 	}
-	BITSTRING(s_v)->arr[m0] = w << (WORD_SZ16 - n % WORD_SZ16)*16;
+	w >>= n_hxd * 16 - n % WORD_WIDTH;
+	BITSTRING(s_v)->arr[m0] = w << (WORD_WIDTH - 1 - (n - 1) % WORD_WIDTH);
     }
     CAMLreturn (s_v);
 }
