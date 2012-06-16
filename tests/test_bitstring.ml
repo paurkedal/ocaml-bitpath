@@ -125,7 +125,16 @@ let test_one () =
     let nC = Random.int (nB + 1) in
     let bsC = Bitstring.slice nA (nA + nC) bs in
     let bsC' = Bitstring.prefix nC bsB in
-    assert (Bitstring.equal bsC bsC')
+    assert (Bitstring.equal bsC bsC');
+
+    assert (bs8 = Bitstring.of_string (Bitstring.to_string bs8));
+    if Bitstring.length bs mod 4 = 0 then
+	assert (bs = Bitstring.of_hex_string (Bitstring.to_hex_string bs));
+    if Bitstring.length bs mod 8 = 0 then
+	assert (bs = Bitstring.of_bin_string (Bitstring.to_bin_string bs));
+    let n' = n + Random.int 65 in
+    assert (bs = Bitstring.of_hex_string ~n (Bitstring.to_hex_string ~n:n' bs));
+    assert (bs = Bitstring.of_bin_string ~n (Bitstring.to_bin_string ~n:n' bs))
 
 let test () =
     for n = 0 to 500 do

@@ -108,8 +108,39 @@ let of_string str =
 	  | '0' -> false
 	  | '1' -> true
 	  | _ -> invalid_arg "Bitstring.of_string" in
+    if str = "ε" then empty else
     init (String.length str) get_bit
 
 let to_string s =
     if length s = 0 then "ε" else
     String.init (length s) (fun i -> if get i s then '1' else '0')
+
+let of_bin_string ?n str =
+    let m = String.length str in
+    let n = Option.default (m * 8) n in
+    init8 n (fun i -> if i < m then Char.code (String.get str i) else 0)
+
+let to_bin_string ?n s =
+    let ns = length s in
+    let put_octet i = Char.chr (if 8 * i < ns then get8 i s else 0) in
+    String.init ((Option.default ns n + 7) / 8) put_octet
+
+let of_hex_string ?n str =
+    let m = String.length str in
+    let n = Option.default (m * 4) n in
+    let get_octet i =
+	if 2*i + 1 < m then
+	    16 * Char.hexdigit_to_int str.[2*i]
+	       + Char.hexdigit_to_int str.[2*i + 1] else
+	if 2*i < m then
+	    16 * Char.hexdigit_to_int str.[2*i] else
+	0 in
+    init8 n get_octet
+
+let to_hex_string ?n s =
+    let ns = length s in
+    let put_quartet i =
+	let x = if (4 * i) >= ns then 0 else
+		get8 (i / 2) s lsr (4*(1 - i mod 2)) land 15 in
+	Char.hexdigit_of_int x in
+    String.init ((Option.default ns n + 3) / 4) put_quartet

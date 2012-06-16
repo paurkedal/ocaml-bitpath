@@ -150,3 +150,21 @@ val of_string : string -> t
 val to_string : t -> string
 (** [to_string s] turns [s] to a textual representation of ['0'] and ['1']
     characters, starting with the lowest index. *)
+
+(** [of_hex_string ~n str] returns the bitstring described by the hexadecimal
+    string [str], clipped to [n] bits if specified. *)
+val of_hex_string : ?n : int -> string -> t
+
+(** [to_hex_string ~n s] is the hexadecimal encoding of [s] padded with zeros
+    to the next quartet, or clipped or padded to [n] bits if specified. *)
+val to_hex_string : ?n : int -> t -> string
+
+(** [of_bin_string ~n s8] converts an octet string [s8] to a bit string [s1],
+    where [get (8*i + j) s1] equals bit number [7 - j] of [String.get i s8].
+    The result is clipped or padded with zeros to [n] bits. *)
+val of_bin_string : ?n : int -> string -> t
+
+(** [to_bin_string ~n s] converts a bit string to an octet string using the
+    same representation as [of_bit_string].  The result it clipped or padded
+    with zeros to [(n + 7) / 8] octets. *)
+val to_bin_string : ?n : int -> t -> string

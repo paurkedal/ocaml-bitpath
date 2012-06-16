@@ -18,6 +18,19 @@ val ident : 'a -> 'a
 val konst : 'a -> 'b -> 'a
 val ( |< ) : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
 
+module Option : sig
+    type 'a t = 'a option
+
+    val default : 'a -> 'a option -> 'a
+end
+
+module Char : sig
+    include module type of Char
+
+    val hexdigit_of_int : int -> char
+    val hexdigit_to_int : char -> int
+end
+
 module String : sig
     include module type of String
 
