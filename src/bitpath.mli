@@ -14,7 +14,7 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *)
 
-(** The [Bitstring] module implements strings of booleans.  The bits are
+(** The [Bitpath] module implements strings of booleans.  The bits are
     compactly represented packed into native words.  Core functions are
     written in C to operate on full words. *)
 
@@ -23,7 +23,7 @@
 type t
 
 
-external length : t -> int = "camlbitlib_bitstring_length"
+external length : t -> int = "camlbitpath_length"
 (** [length s] is the number of bits contained in [s]. *)
 
 val length8 : t -> int
@@ -32,18 +32,18 @@ val length8 : t -> int
 val length16 : t -> int
 (** [length16 s = ⌈length s / 16⌉]. *)
 
-external get : int -> t -> bool = "camlbitlib_bitstring_get"
+external get : int -> t -> bool = "camlbitpath_get"
 (** [get i s] is true iff the [i]th bit of [s] is set. *)
 
-external get8 : int -> t -> int = "camlbitlib_bitstring_get8"
+external get8 : int -> t -> int = "camlbitpath_get8"
 (** [get8 i s] is the integer with bit number [7 - j] equal to bit number
     [8*i + j] of [s]. *)
 
-external get16 : int -> t -> int = "camlbitlib_bitstring_get16"
+external get16 : int -> t -> int = "camlbitpath_get16"
 (** [get16 i s] is the integer with bit number [15 - j] equal to bit number
     [16*i + j] of [s]. *)
 
-external compare : t -> t -> int = "camlbitlib_bitstring_compare"
+external compare : t -> t -> int = "camlbitpath_compare"
 (** [compare sA sB] returns [-1], [0], or [1] when [sA] is less, equal, or
     greater than [sB], respectively, according to lexicographical ordering of
     bits. *)
@@ -55,30 +55,30 @@ val equal : t -> t -> bool
 val empty : t
 (** The empty bit-string. *)
 
-external init : int -> (int -> bool) -> t = "camlbitlib_bitstring_init"
+external init : int -> (int -> bool) -> t = "camlbitpath_init"
 (** [init n f] turns the predicate [f] into a bit-string [s] of length [n]
     such that [f i = get f i] for 0 ≤ [i] < [n]. *)
 
-external init8 : int -> (int -> int) -> t = "camlbitlib_bitstring_init8"
+external init8 : int -> (int -> int) -> t = "camlbitpath_init8"
 (** [init8 n f] is the [n]-bit string [s] such that [get (8*i + j) s] is
     [true] iff bit number [7 - j] of [f i] is set.  If [n] is not a multiple
     of [8], then the [n mod 8] most significant bits of [f (n / 8)] are used;
     the rest are ignored.  *)
 
-external init16 : int -> (int -> int) -> t = "camlbitlib_bitstring_init16"
+external init16 : int -> (int -> int) -> t = "camlbitpath_init16"
 (** [init16 n f] is the [n]-bit string [s] such that [get (16*i + j) s] is
     [true] iff bit number [15 - j] of [f i] is set.  If [n] is not a multiple
     of [16], then the [n mod 16] most significant bits of [f (n / 16)] are
     used; the rest are ignored. *)
 
-external const : int -> bool -> t = "camlbitlib_bitstring_const"
+external const : int -> bool -> t = "camlbitpath_const"
 (** [const n x] is the [n]-bit string of [x]. *)
 
 
-external bitnot : t -> t = "camlbitlib_bitstring_not"
+external bitnot : t -> t = "camlbitpath_not"
 (** [bitnot s] is the string [s'] such that [get i s = not (get i s')]. *)
 
-external slice : int -> int -> t -> t = "camlbitlib_bitstring_slice"
+external slice : int -> int -> t -> t = "camlbitpath_slice"
 (** [slice i j s] is the sub-string of bit [i] to [j - 1] of [s]. *)
 
 val prefix : int -> t -> t
@@ -99,18 +99,18 @@ val has_suffix : t -> t -> bool
 (** [has_suffix s0 s] is true iff [s] ends with [s0]. *)
 
 external coprefix_length : t -> t -> int
-    = "camlbitlib_bitstring_coprefix_length"
+    = "camlbitpath_coprefix_length"
 (** [coprefix_length sA sB] is the largest [n] such that
     [get i sA = get i sB] for [i < n]. *)
 
 val coprefix : t -> t -> t
 
 external coslice_length : int -> t -> int -> t -> int
-    = "camlbitlib_bitstring_coslice_length"
+    = "camlbitpath_coslice_length"
 (** [coslice_length iA sA iB sB] is the largest [n] such that
     [get (iA + i) sA = get (iB + i) sB] for [i < n]. *)
 
-external cat : t -> t -> t = "camlbitlib_bitstring_cat"
+external cat : t -> t -> t = "camlbitpath_cat"
 (** [cat s0 s1] is the concatenation of [s0] and [s1]. *)
 
 val map : (bool -> bool) -> t -> t

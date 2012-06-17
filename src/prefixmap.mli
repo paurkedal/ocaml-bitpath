@@ -35,7 +35,7 @@ end
     pre-constructed maps. *)
 module Poly : sig
 
-    type prefix = Bitstring.t
+    type prefix = Bitpath.t
     type 'a t
 
     val empty : 'a t
@@ -67,7 +67,7 @@ end
     type for the codomain. *)
 module Make (C : Equatable) : sig
 
-    type prefix = Bitstring.t
+    type prefix = Bitpath.t
     type codomain = C.t
     type t = codomain Poly.t
 

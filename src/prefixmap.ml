@@ -16,8 +16,8 @@
 
 open Bitlib_prereq
 
-let bitstring_0 = Bitstring.const 1 false
-let bitstring_1 = Bitstring.const 1 true
+let bitstring_0 = Bitpath.const 1 false
+let bitstring_1 = Bitpath.const 1 true
 
 module type Equatable = sig
     type t
@@ -26,7 +26,7 @@ end
 
 module Poly = struct
 
-    type prefix = Bitstring.t
+    type prefix = Bitpath.t
 
     type 'a t =
        | E
@@ -35,10 +35,10 @@ module Poly = struct
        | P of prefix * 'a t
 
     let rec unzoom p m =
-	if Bitstring.length p = 0 then m else
+	if Bitpath.length p = 0 then m else
 	match m with
 	  | E -> E
-	  | P (p', m') -> P (Bitstring.cat p p', m')
+	  | P (p', m') -> P (Bitpath.cat p p', m')
 	  | _ -> P (p, m)
 
     let empty = E
@@ -52,29 +52,29 @@ module Poly = struct
       | E -> E
       | U c -> U c
       | Y (m, _) -> m
-      | P (p, m) -> if Bitstring.get 0 p then E else
-		    unzoom (Bitstring.suffix 1 p) m
+      | P (p, m) -> if Bitpath.get 0 p then E else
+		    unzoom (Bitpath.suffix 1 p) m
     let upper_half = function
       | E -> E
       | U c -> U c
       | Y (_, m) -> m
-      | P (p, m) -> if not (Bitstring.get 0 p) then E else 
-		    unzoom (Bitstring.suffix 1 p) m
+      | P (p, m) -> if not (Bitpath.get 0 p) then E else 
+		    unzoom (Bitpath.suffix 1 p) m
 
     let rec zoom pG m =
-	let nG = Bitstring.length pG in
+	let nG = Bitpath.length pG in
 	let rec loop iG m =
 	    if iG = nG then m else
 	    match m with
 	      | E -> E
 	      | U x -> U x
 	      | Y (mL, mR) ->
-		loop (iG + 1) (if Bitstring.get iG pG then mR else mL)
+		loop (iG + 1) (if Bitpath.get iG pG then mR else mL)
 	      | P (p', m') ->
-		let n' = Bitstring.length p' in
-		let n = Bitstring.coslice_length iG pG 0 p' in
+		let n' = Bitpath.length p' in
+		let n = Bitpath.coslice_length iG pG 0 p' in
 		if n = n' then loop (iG + n) m' else
-		if n = nG - iG then P (Bitstring.slice n n' p', m') else
+		if n = nG - iG then P (Bitpath.slice n n' p', m') else
 		E in
 	loop 0 m
 
@@ -86,10 +86,10 @@ module Poly = struct
       | _, P (pB, mBI) -> disjoint (zoom pB mA) mBI
 
     let remove pG m =
-	let nG = Bitstring.length pG in
+	let nG = Bitpath.length pG in
 	let rec remove_uniform m iG =
 	    if iG = nG then E else
-	    if Bitstring.get iG pG then Y (m, remove_uniform m (iG + 1))
+	    if Bitpath.get iG pG then Y (m, remove_uniform m (iG + 1))
 				   else Y (remove_uniform m (iG + 1), m) in
 	let rec loop iG m =
 	    if iG = nG then m else
@@ -97,11 +97,11 @@ module Poly = struct
 	      | E -> E
 	      | U c -> remove_uniform m iG
 	      | Y (mL, mR) ->
-		if Bitstring.get iG pG then Y (mL, loop (iG + 1) mR)
+		if Bitpath.get iG pG then Y (mL, loop (iG + 1) mR)
 				       else Y (loop (iG + 1) mL, mR)
 	      | P (p', m') ->
-		if Bitstring.has_slice p' iG pG
-		then unzoom p' (loop (iG + Bitstring.length p') m')
+		if Bitpath.has_slice p' iG pG
+		then unzoom p' (loop (iG + Bitpath.length p') m')
 		else m in
 	loop 0 m
 
@@ -117,10 +117,10 @@ module Poly = struct
 	let rec loop p = function
 	  | E -> ident
 	  | U c -> f p c
-	  | Y (m0, m1) -> loop (Bitstring.cat p bitstring_1) m1
-		       |< loop (Bitstring.cat p bitstring_0) m0
-	  | P (pI, mI) -> loop (Bitstring.cat p pI) mI in
-	loop Bitstring.empty
+	  | Y (m0, m1) -> loop (Bitpath.cat p bitstring_1) m1
+		       |< loop (Bitpath.cat p bitstring_0) m0
+	  | P (pI, mI) -> loop (Bitpath.cat p pI) mI in
+	loop Bitpath.empty
 
     let rec iter f = function
       | E -> ()
@@ -132,10 +132,10 @@ module Poly = struct
 	let rec loop p = function
 	  | E -> ()
 	  | U c -> f p c
-	  | Y (m0, m1) -> loop (Bitstring.cat p bitstring_0) m0;
-			  loop (Bitstring.cat p bitstring_1) m1
-	  | P (pI, mI) -> loop (Bitstring.cat p pI) mI in
-	loop Bitstring.empty
+	  | Y (m0, m1) -> loop (Bitpath.cat p bitstring_0) m0;
+			  loop (Bitpath.cat p bitstring_1) m1
+	  | P (pI, mI) -> loop (Bitpath.cat p pI) mI in
+	loop Bitpath.empty
 
     let card m = fold (fun _ -> (+) 1) m 0
 end
@@ -168,44 +168,44 @@ module Make (C : Equatable) = struct
       | Y (U cL, U cR) -> not (C.equal cL cR)
       | Y (m0, m1) -> valid m0 && valid m1
       | P (p, E) | P (p, P _) -> false
-      | P (p, m) -> Bitstring.length p > 0 && valid m
+      | P (p, m) -> Bitpath.length p > 0 && valid m
 
     let rec equal ma mb = match ma, mb with
       | E, E -> true
       | U ca, U cb -> C.equal ca cb
       | Y (maL, maR), Y (mbL, mbR) -> equal maL mbL && equal maR mbR
-      | P (pa, ma'), P (pb, mb') -> Bitstring.equal pa pb && equal ma' mb'
+      | P (pa, ma'), P (pb, mb') -> Bitpath.equal pa pb && equal ma' mb'
       | E, _ | U _, _ | Y _, _ | P _, _ -> false
 
     let appose mL mR = match mL, mR with
       | E, E -> E
       | U cL, U cR -> if C.equal cL cR then U cL else Y (mL, mR)
-      | _, E -> unzoom (Bitstring.init 1 (konst false)) mL
-      | E, _ -> unzoom (Bitstring.init 1 (konst true)) mR
+      | _, E -> unzoom (Bitpath.init 1 (konst false)) mL
+      | E, _ -> unzoom (Bitpath.init 1 (konst true)) mR
       | _ -> Y (mL, mR)
 
     let rec modify pG f m =
-	let nG = Bitstring.length pG in
+	let nG = Bitpath.length pG in
 	let rec loop iG m =
 	    if iG = nG then f m else
 	    match m with
 	      | E | U _ ->
-		if Bitstring.get iG pG then appose m (loop (iG + 1) m)
+		if Bitpath.get iG pG then appose m (loop (iG + 1) m)
 				       else appose (loop (iG + 1) m) m
 	      | Y (mL, mR) ->
-		if Bitstring.get iG pG then appose mL (loop (iG + 1) mR)
+		if Bitpath.get iG pG then appose mL (loop (iG + 1) mR)
 				       else appose (loop (iG + 1) mL) mR
 	      | P (p', m') ->
-		let n' = Bitstring.length p' in
-		let n = Bitstring.coslice_length iG pG 0 p' in
+		let n' = Bitpath.length p' in
+		let n = Bitpath.coslice_length iG pG 0 p' in
 		if n = n' then unzoom p' (loop (iG + n) m') else
 		let m_new =
-		    if iG + n = nG then f (P (Bitstring.slice n n' p', m')) else
-		    let m_unm = unzoom (Bitstring.slice (n + 1) n' p') m' in
-		    let m_mod = unzoom (Bitstring.slice (iG+n+1) nG pG) (f E) in
-		    if Bitstring.get n p' then appose m_mod m_unm
+		    if iG + n = nG then f (P (Bitpath.slice n n' p', m')) else
+		    let m_unm = unzoom (Bitpath.slice (n + 1) n' p') m' in
+		    let m_mod = unzoom (Bitpath.slice (iG+n+1) nG pG) (f E) in
+		    if Bitpath.get n p' then appose m_mod m_unm
 					  else appose m_unm m_mod in
-		unzoom (Bitstring.prefix n p') m_new in
+		unzoom (Bitpath.prefix n p') m_new in
 	loop 0 m
 
     let add p x = modify p (konst (U x))
@@ -227,10 +227,10 @@ module Make (C : Equatable) = struct
 	let rec loop p = function
 	  | E -> E
 	  | U c -> U (f p c)
-	  | Y (m0, m1) -> appose (loop (Bitstring.cat p bitstring_0) m0)
-				 (loop (Bitstring.cat p bitstring_1) m1)
-	  | P (pI, mI) -> P (pI, loop (Bitstring.cat p pI) mI) in
-	loop Bitstring.empty
+	  | Y (m0, m1) -> appose (loop (Bitpath.cat p bitstring_0) m0)
+				 (loop (Bitpath.cat p bitstring_1) m1)
+	  | P (pI, mI) -> P (pI, loop (Bitpath.cat p pI) mI) in
+	loop Bitpath.empty
 
     let rec right_isecn mA mB =
 	match mA, mB with

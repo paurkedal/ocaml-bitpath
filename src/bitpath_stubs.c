@@ -14,7 +14,7 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "bitstring.h"
+#include "bitpath.h"
 
 #include <caml/callback.h>
 #include <caml/custom.h>
@@ -28,38 +28,37 @@
 #ifndef MIN
 #  define MIN(x, y) ((x) <= (y)? (x) : (y))
 #endif
-#define WORD_ROT(i, k) ((i << k) | (i >> (8*sizeof(bitlib_word_t) - i)))
-#define WORD_WIDTH BITLIB_WORD_WIDTH
-#define WORD_SIZE (BITLIB_WORD_WIDTH / 8)
-#define WORD_SZ16 (BITLIB_WORD_WIDTH / 16)
+#define WORD_ROT(i, k) ((i << k) | (i >> (8*sizeof(bitpath_word_t) - i)))
+#define WORD_WIDTH BITPATH_WORD_WIDTH
+#define WORD_SIZE (BITPATH_WORD_WIDTH / 8)
+#define WORD_SZ16 (BITPATH_WORD_WIDTH / 16)
 #define WORD_CNT(n) (((n) + WORD_WIDTH - 1) / WORD_WIDTH)
 #define WORD_MOD(i) (WORD_WIDTH - 1 - (i) % WORD_WIDTH)
 #define WORD_MOD8(i) ((WORD_SIZE - 1 - (i) % WORD_SIZE) * 8)
 #define WORD_MOD16(i) ((WORD_SZ16 - 1 - (i) % WORD_SZ16) * 16)
 
-#define BITSTRING BITLIB_BITSTRING
-#define BITSTRING_GET(i, s)  ((s->arr[(i) / WORD_WIDTH] >> WORD_MOD(i)) & 1)
-#define BITSTRING_GET8(i, s) ((s->arr[(i) / WORD_SIZE] >> WORD_MOD8(i)) & 0xff)
-#define BITSTRING_GET16(i, s) \
+#define BITPATH_GET(i, s)  ((s->arr[(i) / WORD_WIDTH] >> WORD_MOD(i)) & 1)
+#define BITPATH_GET8(i, s) ((s->arr[(i) / WORD_SIZE] >> WORD_MOD8(i)) & 0xff)
+#define BITPATH_GET16(i, s) \
     ((s->arr[(i) / WORD_SZ16] >> WORD_MOD16(i)) & 0xffff)
 
-#ifndef BITLIB_BITSTRING_INLINED
+#ifndef BITPATH_INLINED
 static void
-_bitstring_finalize(value s_v)
+_bitpath_finalize(value s_v)
 {
-    free(BITSTRING(s_v)->arr);
+    free(BITPATH(s_v)->arr);
 }
 #endif
 
 static int
-_bitstring_compare(value sA_v, value sB_v)
+_bitpath_compare(value sA_v, value sB_v)
 {
     size_t i;
-    size_t mA = WORD_CNT(BITSTRING(sA_v)->len);
-    size_t mB = WORD_CNT(BITSTRING(sB_v)->len);
+    size_t mA = WORD_CNT(BITPATH(sA_v)->len);
+    size_t mB = WORD_CNT(BITPATH(sB_v)->len);
     for (i = 0; i < MIN(mA, mB); ++i) {
-	bitlib_word_t wA = BITSTRING(sA_v)->arr[i];
-	bitlib_word_t wB = BITSTRING(sB_v)->arr[i];
+	bitpath_word_t wA = BITPATH(sA_v)->arr[i];
+	bitpath_word_t wB = BITPATH(sB_v)->arr[i];
 	if (wA < wB) return -1;
 	if (wA > wB) return 1;
     }
@@ -69,13 +68,13 @@ _bitstring_compare(value sA_v, value sB_v)
 }
 
 value
-camlbitlib_bitstring_compare(value sA_v, value sB_v)
+camlbitpath_compare(value sA_v, value sB_v)
 {
-    return Val_int(_bitstring_compare(sA_v, sB_v));
+    return Val_int(_bitpath_compare(sA_v, sB_v));
 }
 
 /* Based on Bob Jenkins' hash functions. */
-#if BITLIB_WORD_WIDTH >= 64
+#if BITPATH_WORD_WIDTH >= 64
 #  define MIX(a, b, c) \
     do { \
         a -= b + c;  a ^= (c >> 43); \
@@ -104,70 +103,70 @@ camlbitlib_bitstring_compare(value sA_v, value sB_v)
 #endif
 
 static long
-_bitstring_hash(value s_v)
+_bitpath_hash(value s_v)
 {
-    size_t i, m = WORD_CNT(BITSTRING(s_v)->len);
+    size_t i, m = WORD_CNT(BITPATH(s_v)->len);
     long a, b, c;
     a = 0xba5ebee7;
     b = 0xcafebabe;
-    c = BITSTRING(s_v)->len;
+    c = BITPATH(s_v)->len;
     for (i = 0; i < m - 2; i += 3) {
-	a += BITSTRING(s_v)->arr[i];
-	b += BITSTRING(s_v)->arr[i + 1];
-	c += BITSTRING(s_v)->arr[i + 2];
+	a += BITPATH(s_v)->arr[i];
+	b += BITPATH(s_v)->arr[i + 1];
+	c += BITPATH(s_v)->arr[i + 2];
 	MIX(a, b, c);
     }
     if (i < m) {
-	a += BITSTRING(s_v)->arr[i];
-	if (i + 1 < m) b += BITSTRING(s_v)->arr[i + 1];
+	a += BITPATH(s_v)->arr[i];
+	if (i + 1 < m) b += BITPATH(s_v)->arr[i + 1];
 	MIX(a, b, c);
     }
     return c;
 }
 
-static struct custom_operations _bitstring_ops = {
-    "org.eideticdew.bitlib.bitstring",
-#ifndef BITLIB_BITSTRING_INLINED
-    _bitstring_finalize,
+static struct custom_operations _bitpath_ops = {
+    "org.eideticdew.p.bitpath",
+#ifndef BITPATH_INLINED
+    _bitpath_finalize,
 #else
     custom_finalize_default,
 #endif
-    _bitstring_compare,
-    _bitstring_hash,
+    _bitpath_compare,
+    _bitpath_hash,
     custom_serialize_default,
     custom_deserialize_default,
     custom_compare_ext_default,
 };
 
 static value
-_bitstring_alloc(size_t m)
+_bitpath_alloc(size_t m)
 {
-#ifdef BITLIB_BITSTRING_INLINED
-    return caml_alloc_custom(&_bitstring_ops,
-	    sizeof(struct bitlib_bitstring) + (m - 1)*sizeof(bitlib_word_t),
+#ifdef BITPATH_INLINED
+    return caml_alloc_custom(&_bitpath_ops,
+	    sizeof(struct bitpath) + (m - 1)*sizeof(bitpath_word_t),
 	    0, 1);
 #else
-    value s = caml_alloc_custom(&_bitstring_ops,
-				sizeof(struct bitlib_bitstring), 0, 1);
-    BITSTRING(s)->arr = malloc(m * WORD_SIZE);
+    value s = caml_alloc_custom(&_bitpath_ops,
+				sizeof(struct bitpath), 0, 1);
+    BITPATH(s)->arr = malloc(m * WORD_SIZE);
     return s;
 #endif
 }
 
-static value _bitstring_empty = Val_unit;
+static value _bitpath_empty = Val_unit;
 
 value
-camlbitlib_bitstring_make_empty(value _)
+camlbitpath_make_empty(value _)
 {
-    assert(_bitstring_empty == Val_unit);
-    caml_register_global_root(&_bitstring_empty);
-    _bitstring_empty = _bitstring_alloc(0);
-    BITSTRING(_bitstring_empty)->len = 0;
-    return _bitstring_empty;
+    assert(_bitpath_empty == Val_unit);
+    caml_register_global_root(&_bitpath_empty);
+    _bitpath_empty = _bitpath_alloc(0);
+    BITPATH(_bitpath_empty)->len = 0;
+    return _bitpath_empty;
 }
 
 value
-camlbitlib_bitstring_init(value n_v, value f_v)
+camlbitpath_init(value n_v, value f_v)
 {
     CAMLparam2 (n_v, f_v);
     CAMLlocal1 (s_v);
@@ -175,33 +174,33 @@ camlbitlib_bitstring_init(value n_v, value f_v)
     size_t m0 = n / WORD_WIDTH;
     size_t m = WORD_CNT(n);
 
-    s_v = _bitstring_alloc(m);
-    BITSTRING(s_v)->len = n;
-    if (!BITSTRING(s_v)->arr)
+    s_v = _bitpath_alloc(m);
+    BITPATH(s_v)->len = n;
+    if (!BITPATH(s_v)->arr)
 	caml_raise_out_of_memory();
     for (i = 0; i < m0; ++i) {
-	bitlib_word_t w = 0;
+	bitpath_word_t w = 0;
 	for (j = 0; j < WORD_WIDTH; ++j) {
 	    int x = Bool_val(caml_callback(f_v, Val_long(i * WORD_WIDTH + j)));
 	    w <<= 1;
 	    w |= x;
 	}
-	BITSTRING(s_v)->arr[i] = w;
+	BITPATH(s_v)->arr[i] = w;
     }
     if (m0 < m) {
-	bitlib_word_t w = 0;
+	bitpath_word_t w = 0;
 	for (j = 0; j < n % WORD_WIDTH; ++j) {
 	    int x = Bool_val(caml_callback(f_v, Val_long(m0 * WORD_WIDTH + j)));
 	    w <<= 1;
 	    w |= x;
 	}
-	BITSTRING(s_v)->arr[m0] = w << (WORD_WIDTH - n % WORD_WIDTH);
+	BITPATH(s_v)->arr[m0] = w << (WORD_WIDTH - n % WORD_WIDTH);
     }
     CAMLreturn (s_v);
 }
 
 value
-camlbitlib_bitstring_init8(value n_v, value f_v)
+camlbitpath_init8(value n_v, value f_v)
 {
     CAMLparam2 (n_v, f_v);
     CAMLlocal1 (s_v);
@@ -209,21 +208,21 @@ camlbitlib_bitstring_init8(value n_v, value f_v)
     size_t m0 = n / WORD_WIDTH;
     size_t m = WORD_CNT(n);
 
-    s_v = _bitstring_alloc(m);
-    BITSTRING(s_v)->len = n;
-    if (!BITSTRING(s_v)->arr)
+    s_v = _bitpath_alloc(m);
+    BITPATH(s_v)->len = n;
+    if (!BITPATH(s_v)->arr)
 	caml_raise_out_of_memory();
     for (i = 0; i < m0; ++i) {
-	bitlib_word_t w = 0;
+	bitpath_word_t w = 0;
 	for (j = 0; j < WORD_SIZE; ++j) {
 	    int x = Int_val(caml_callback(f_v, Val_long(i * WORD_SIZE + j)));
 	    w <<= 8;
 	    w |= x;
 	}
-	BITSTRING(s_v)->arr[i] = w;
+	BITPATH(s_v)->arr[i] = w;
     }
     if (m0 < m) {
-	bitlib_word_t w = 0;
+	bitpath_word_t w = 0;
 	int n_oct = (n % WORD_WIDTH + 7) / 8;
 	for (j = 0; j < n_oct; ++j) {
 	    int x = Int_val(caml_callback(f_v, Val_long(m0 * WORD_SIZE + j)));
@@ -231,13 +230,13 @@ camlbitlib_bitstring_init8(value n_v, value f_v)
 	    w |= x;
 	}
 	w >>= n_oct * 8 - n % WORD_WIDTH;
-	BITSTRING(s_v)->arr[m0] = w << (WORD_WIDTH - 1 - (n - 1) % WORD_WIDTH);
+	BITPATH(s_v)->arr[m0] = w << (WORD_WIDTH - 1 - (n - 1) % WORD_WIDTH);
     }
     CAMLreturn (s_v);
 }
 
 value
-camlbitlib_bitstring_init16(value n_v, value f_v)
+camlbitpath_init16(value n_v, value f_v)
 {
     CAMLparam2 (n_v, f_v);
     CAMLlocal1 (s_v);
@@ -245,21 +244,21 @@ camlbitlib_bitstring_init16(value n_v, value f_v)
     size_t m0 = n / WORD_WIDTH;
     size_t m = WORD_CNT(n);
 
-    s_v = _bitstring_alloc(m);
-    BITSTRING(s_v)->len = n;
-    if (!BITSTRING(s_v)->arr)
+    s_v = _bitpath_alloc(m);
+    BITPATH(s_v)->len = n;
+    if (!BITPATH(s_v)->arr)
 	caml_raise_out_of_memory();
     for (i = 0; i < m0; ++i) {
-	bitlib_word_t w = 0;
+	bitpath_word_t w = 0;
 	for (j = 0; j < WORD_SZ16; ++j) {
 	    int x = Int_val(caml_callback(f_v, Val_long(i*WORD_SZ16 + j)));
 	    w <<= 16;
 	    w |= x;
 	}
-	BITSTRING(s_v)->arr[i] = w;
+	BITPATH(s_v)->arr[i] = w;
     }
     if (m0 < m) {
-	bitlib_word_t w = 0;
+	bitpath_word_t w = 0;
 	int n_hxd = (n % WORD_WIDTH + 15) / 16;
 	for (j = 0; j < n_hxd; ++j) {
 	    int x = Int_val(caml_callback(f_v, Val_long(m0 * WORD_SZ16 + j)));
@@ -267,117 +266,117 @@ camlbitlib_bitstring_init16(value n_v, value f_v)
 	    w |= x;
 	}
 	w >>= n_hxd * 16 - n % WORD_WIDTH;
-	BITSTRING(s_v)->arr[m0] = w << (WORD_WIDTH - 1 - (n - 1) % WORD_WIDTH);
+	BITPATH(s_v)->arr[m0] = w << (WORD_WIDTH - 1 - (n - 1) % WORD_WIDTH);
     }
     CAMLreturn (s_v);
 }
 
 #include <stdio.h>
 value
-camlbitlib_bitstring_const(value n_v, value x_v)
+camlbitpath_const(value n_v, value x_v)
 {
     CAMLparam2 (n_v, x_v);
     CAMLlocal1 (s_v);
     size_t i, n, m;
-    bitlib_word_t x;
+    bitpath_word_t x;
 
     n = Long_val(n_v);
     if (n == 0) {
-	assert(_bitstring_empty != Val_unit);
-	CAMLreturn (_bitstring_empty);
+	assert(_bitpath_empty != Val_unit);
+	CAMLreturn (_bitpath_empty);
     }
     m = WORD_CNT(n);
-    x = Bool_val(x_v)? ~BITLIB_WORD_C(0) : 0;
-    s_v = _bitstring_alloc(m);
-    BITSTRING(s_v)->len = n;
-    if (!BITSTRING(s_v)->arr)
+    x = Bool_val(x_v)? ~BITPATH_WORD_C(0) : 0;
+    s_v = _bitpath_alloc(m);
+    BITPATH(s_v)->len = n;
+    if (!BITPATH(s_v)->arr)
 	caml_raise_out_of_memory();
     for (i = 0; i < m - 1; ++i)
-	BITSTRING(s_v)->arr[i] = x;
-    BITSTRING(s_v)->arr[m - 1] = x << (WORD_WIDTH - 1 - (n - 1) % WORD_WIDTH);
+	BITPATH(s_v)->arr[i] = x;
+    BITPATH(s_v)->arr[m - 1] = x << (WORD_WIDTH - 1 - (n - 1) % WORD_WIDTH);
     CAMLreturn (s_v);
 }
 
 value
-camlbitlib_bitstring_not(value sA_v)
+camlbitpath_not(value sA_v)
 {
     CAMLparam1 (sA_v);
     CAMLlocal1 (sN_v);
     size_t i, n, m;
-    n = BITSTRING(sA_v)->len;
+    n = BITPATH(sA_v)->len;
     if (n == 0) {
-	assert(_bitstring_empty != Val_unit);
-	CAMLreturn (_bitstring_empty);
+	assert(_bitpath_empty != Val_unit);
+	CAMLreturn (_bitpath_empty);
     }
     m = WORD_CNT(n);
-    sN_v = _bitstring_alloc(m);
-    BITSTRING(sN_v)->len = n;
+    sN_v = _bitpath_alloc(m);
+    BITPATH(sN_v)->len = n;
     for (i = 0; i < m - 1; ++i)
-	BITSTRING(sN_v)->arr[i] = ~BITSTRING(sA_v)->arr[i];
-    BITSTRING(sN_v)->arr[m - 1] = ~BITSTRING(sA_v)->arr[m - 1]
-	    & (~BITLIB_WORD_C(0) << (WORD_WIDTH - 1 - (n - 1) % WORD_WIDTH));
+	BITPATH(sN_v)->arr[i] = ~BITPATH(sA_v)->arr[i];
+    BITPATH(sN_v)->arr[m - 1] = ~BITPATH(sA_v)->arr[m - 1]
+	    & (~BITPATH_WORD_C(0) << (WORD_WIDTH - 1 - (n - 1) % WORD_WIDTH));
     CAMLreturn (sN_v);
 }
 
 value
-camlbitlib_bitstring_length(value s_v)
+camlbitpath_length(value s_v)
 {
-    return Val_long(BITSTRING(s_v)->len);
+    return Val_long(BITPATH(s_v)->len);
 }
 
 value
-camlbitlib_bitstring_get(value i_v, value s_v)
+camlbitpath_get(value i_v, value s_v)
 {
     size_t i = Long_val(i_v);
-    return Val_bool(BITSTRING_GET(i, BITSTRING(s_v)));
+    return Val_bool(BITPATH_GET(i, BITPATH(s_v)));
 }
 
 value
-camlbitlib_bitstring_get8(value i_v, value s_v)
+camlbitpath_get8(value i_v, value s_v)
 {
     size_t i = Long_val(i_v);
-    return Val_int(BITSTRING_GET8(i, BITSTRING(s_v)));
+    return Val_int(BITPATH_GET8(i, BITPATH(s_v)));
 }
 
 value
-camlbitlib_bitstring_get16(value i_v, value s_v)
+camlbitpath_get16(value i_v, value s_v)
 {
     size_t i = Long_val(i_v);
-    return Val_int(BITSTRING_GET16(i, BITSTRING(s_v)));
+    return Val_int(BITPATH_GET16(i, BITPATH(s_v)));
 }
 
 value
-camlbitlib_bitstring_coprefix_length(value sA_v, value sB_v)
+camlbitpath_coprefix_length(value sA_v, value sB_v)
 {
-    size_t i, n = MIN(BITSTRING(sA_v)->len, BITSTRING(sB_v)->len);
+    size_t i, n = MIN(BITPATH(sA_v)->len, BITPATH(sB_v)->len);
     size_t j, m = n / WORD_WIDTH;
     for (j = 0; j < m; ++j)
-	if (BITSTRING(sA_v)->arr[j] != BITSTRING(sB_v)->arr[j])
+	if (BITPATH(sA_v)->arr[j] != BITPATH(sB_v)->arr[j])
 	    break;
     for (i = j * WORD_WIDTH; i < n; ++i)
-	if (BITSTRING_GET(i, BITSTRING(sA_v)) !=
-	    BITSTRING_GET(i, BITSTRING(sB_v)))
+	if (BITPATH_GET(i, BITPATH(sA_v)) !=
+	    BITPATH_GET(i, BITPATH(sB_v)))
 	    break;
     return Val_long(i);
 }
 
 value
-camlbitlib_bitstring_coslice_length(value iA_v, value sA_v, value iB_v, value sB_v)
+camlbitpath_coslice_length(value iA_v, value sA_v, value iB_v, value sB_v)
 {
     size_t iA = Long_val(iA_v);
     size_t iB = Long_val(iB_v);
-    size_t i, n = MIN(BITSTRING(sA_v)->len - iA, BITSTRING(sB_v)->len - iB);
+    size_t i, n = MIN(BITPATH(sA_v)->len - iA, BITPATH(sB_v)->len - iB);
     /* TODO: This can be optimized to operate on words, but it'll take some
      * coding for unaligned cases. */
     for (i = 0; i < n; ++i)
-	if (BITSTRING_GET(iA + i, BITSTRING(sA_v)) !=
-	    BITSTRING_GET(iB + i, BITSTRING(sB_v)))
+	if (BITPATH_GET(iA + i, BITPATH(sA_v)) !=
+	    BITPATH_GET(iB + i, BITPATH(sB_v)))
 	    break;
     return Val_long(i);
 }
 
 value
-camlbitlib_bitstring_slice(value iL_v, value iU_v, value sA_v)
+camlbitpath_slice(value iL_v, value iU_v, value sA_v)
 {
     CAMLparam3 (sA_v, iL_v, iU_v);
     CAMLlocal1 (s_v);
@@ -392,10 +391,10 @@ camlbitlib_bitstring_slice(value iL_v, value iU_v, value sA_v)
 			      "than upper bound.");
 
     if (iL == iU) {
-	assert(_bitstring_empty != Val_unit);
-	CAMLreturn (_bitstring_empty);
+	assert(_bitpath_empty != Val_unit);
+	CAMLreturn (_bitpath_empty);
     }
-    nA = BITSTRING(sA_v)->len;
+    nA = BITPATH(sA_v)->len;
     if (iU > nA)
 	caml_invalid_argument("Bitstring.slice: Upper bound out of range.");
     if (iL == 0 && iU == nA) CAMLreturn (sA_v);
@@ -404,65 +403,65 @@ camlbitlib_bitstring_slice(value iL_v, value iU_v, value sA_v)
     m = WORD_CNT(n);
     assert(m > 0);
 
-    s_v = _bitstring_alloc(m);
-    BITSTRING(s_v)->len = n;
-    if (!BITSTRING(s_v)->arr)
+    s_v = _bitpath_alloc(m);
+    BITPATH(s_v)->len = n;
+    if (!BITPATH(s_v)->arr)
 	caml_raise_out_of_memory();
 
     if (iL % WORD_WIDTH == 0)
-	memcpy(BITSTRING(s_v)->arr, BITSTRING(sA_v)->arr + iL / WORD_WIDTH,
+	memcpy(BITPATH(s_v)->arr, BITPATH(sA_v)->arr + iL / WORD_WIDTH,
 	       m * WORD_SIZE);
     else {
-	bitlib_word_t w0, w1;
+	bitpath_word_t w0, w1;
 	int jL = iL % WORD_WIDTH;
 	size_t k, kL = iL / WORD_WIDTH;
-	w0 = BITSTRING(sA_v)->arr[kL];
+	w0 = BITPATH(sA_v)->arr[kL];
 	for (k = 0; k < m; ++k) {
-	    w1 = BITSTRING(sA_v)->arr[kL + k + 1];
-	    BITSTRING(s_v)->arr[k] = (w0 << jL) | (w1 >> (WORD_WIDTH - jL));
+	    w1 = BITPATH(sA_v)->arr[kL + k + 1];
+	    BITPATH(s_v)->arr[k] = (w0 << jL) | (w1 >> (WORD_WIDTH - jL));
 	    w0 = w1;
 	}
     }
-    BITSTRING(s_v)->arr[m - 1] &= ~BITLIB_WORD_C(0)
-			       << (WORD_WIDTH - 1 - (n - 1) % WORD_WIDTH);
+    BITPATH(s_v)->arr[m - 1] &= ~BITPATH_WORD_C(0)
+			     << (WORD_WIDTH - 1 - (n - 1) % WORD_WIDTH);
     CAMLreturn (s_v);
 }
 
 value
-camlbitlib_bitstring_cat(value sA_v, value sB_v)
+camlbitpath_cat(value sA_v, value sB_v)
 {
     CAMLparam2 (sA_v, sB_v);
     CAMLlocal1 (s_v);
     size_t i, n, m;
-    size_t nA = BITSTRING(sA_v)->len;
-    size_t nB = BITSTRING(sB_v)->len;
+    size_t nA = BITPATH(sA_v)->len;
+    size_t nB = BITPATH(sB_v)->len;
 
     if (nA == 0) CAMLreturn (sB_v);
     if (nB == 0) CAMLreturn (sA_v);
 
     n = nA + nB;
     m = WORD_CNT(n);
-    s_v = _bitstring_alloc(m);
-    BITSTRING(s_v)->len = n;
-    if (!BITSTRING(s_v)->arr)
+    s_v = _bitpath_alloc(m);
+    BITPATH(s_v)->len = n;
+    if (!BITPATH(s_v)->arr)
 	caml_raise_out_of_memory();
-    memcpy(BITSTRING(s_v)->arr, BITSTRING(sA_v)->arr,
+    memcpy(BITPATH(s_v)->arr, BITPATH(sA_v)->arr,
 	   nA / WORD_WIDTH * WORD_SIZE);
     if (nA % WORD_WIDTH == 0)
-	memcpy(BITSTRING(s_v)->arr + nA / WORD_WIDTH, BITSTRING(sB_v)->arr,
+	memcpy(BITPATH(s_v)->arr + nA / WORD_WIDTH, BITPATH(sB_v)->arr,
 	       WORD_CNT(nB) * WORD_SIZE);
     else {
-	bitlib_word_t w0, w1;
+	bitpath_word_t w0, w1;
 	int j = nA % WORD_WIDTH;
 	size_t m0 = nA / WORD_WIDTH + WORD_CNT(nB);
-	w0 = BITSTRING(sA_v)->arr[nA / WORD_WIDTH] >> (WORD_WIDTH - j);
+	w0 = BITPATH(sA_v)->arr[nA / WORD_WIDTH] >> (WORD_WIDTH - j);
 	for (i = nA / WORD_WIDTH; i < m0; ++i) {
-	    w1 = BITSTRING(sB_v)->arr[i - nA / WORD_WIDTH];
-	    BITSTRING(s_v)->arr[i] = (w0 << (WORD_WIDTH - j)) | (w1 >> j);
+	    w1 = BITPATH(sB_v)->arr[i - nA / WORD_WIDTH];
+	    BITPATH(s_v)->arr[i] = (w0 << (WORD_WIDTH - j)) | (w1 >> j);
 	    w0 = w1;
 	}
 	if (m0 < m)
-	    BITSTRING(s_v)->arr[m0] = w0 << (WORD_WIDTH - j);
+	    BITPATH(s_v)->arr[m0] = w0 << (WORD_WIDTH - j);
     }
     CAMLreturn (s_v);
 }

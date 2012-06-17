@@ -4,16 +4,16 @@ Synopsis
 This OCaml library implements compact strings over booleans along with
 related containers.  In particular,
 
-  - `Bitstring` is the string structure.
+  - `Bitpath` is the string structure.
   - `Prefixset` implements sets of infinite strings sharing a finite set of
     prefixes.
   - `Prefixmap` implements maps with domain corresponding to `Prefixset`.
 
-The `Bitstring` structure is partly written in C to utilize bitwise
+The `Bitpath` structure is partly written in C to utilize bitwise
 operations on the native integer type, while keeping the underlying array
 compact.
 
-As an example application, let `Bitstring.t` represent IPv4 and IPv6
+As an example application, let `Bitpath.t` represent IPv4 and IPv6
 addresses, and corresponding CIDR networks.  The `Prefixset` structure then
 represent sets of networks, and provides standard set operations on these.
 

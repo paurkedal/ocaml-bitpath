@@ -14,17 +14,17 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BITLIB_PREREQ_H
-#define BITLIB_PREREQ_H
+#ifndef BITPATH_PREREQ_H
+#define BITPATH_PREREQ_H
 
 #ifdef __cplusplus
-#  define BITLIB_BEGIN_DECLS extern "C" {
-#  define BITLIB_END_DECLS }
+#  define BITPATH_BEGIN_DECLS extern "C" {
+#  define BITPATH_END_DECLS }
 #else
-#  define BITLIB_BEGIN_DECLS
-#  define BITLIB_END_DECLS
+#  define BITPATH_BEGIN_DECLS
+#  define BITPATH_END_DECLS
 #endif
 
-#define BITLIB_SINLINE static inline
+#define BITPATH_SINLINE static inline
 
 #endif

@@ -23,8 +23,8 @@
     In the following we use [·] to represent concatenation of bit-strings
     along with regular set operations to describe modelled sets. *)
 
-type prefix = Bitstring.t
-(** A prefix is represented by a [Bitstring]. *)
+type prefix = Bitpath.t
+(** A prefix is represented by a [Bitpath]. *)
 
 type t
 (** The set type. *)

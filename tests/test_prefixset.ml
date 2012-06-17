@@ -19,7 +19,7 @@ open Bitlib_prereq
 
 let (===) = Prefixset.equal
 
-let random_bitstring n = Bitstring.init n (fun _ -> Random.bool ())
+let random_bitstring n = Bitpath.init n (fun _ -> Random.bool ())
 
 let random_prefixset max_width =
     if max_width = 0 then
@@ -42,7 +42,7 @@ let show_prefixset sv s =
 	Prefixset.prefix_iter (fun x ->
 	    if !count > 0 then print_string ", ";
 	    count := !count + 1;
-	    if Bitstring.length x > 0 then print_string (Bitstring.to_string x);
+	    if Bitpath.length x > 0 then print_string (Bitpath.to_string x);
 	    print_char '*') s;
 	printf "}\n"
     end else begin

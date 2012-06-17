@@ -1,7 +1,7 @@
 OASISFormat:	0.3
 Name:		ocaml-bitlib
 Version:	0.1
-Synopsis:	Bitstring and related structures
+Synopsis:	Bit-strings and related structures
 Authors:	Petter A. Urkedal
 License:	LGPL-3 with OCaml linking exception
 Plugins:	META (0.3)
@@ -9,12 +9,12 @@ BuildTools:	ocamlbuild
 
 Library bitlib
   Path:		src
-  Modules:	Bitlib_prereq, Bitstring, Prefixset, Prefixmap
-  CSources:	prereq.h, bitstring.h, bitstring_stubs.c
+  Modules:	Bitlib_prereq, Bitpath, Prefixset, Prefixmap
+  CSources:	prereq.h, bitpath.h, bitpath_stubs.c
   CCOpt:	-I../src -Wall -g -O2
   DataFiles:
     prereq.h ($prefix/include/bitlib),
-    bitstring.h ($prefix/include/bitlib)
+    bitpath.h ($prefix/include/bitlib)
 
 Document bitlib
   Title:	Bitlib Reference

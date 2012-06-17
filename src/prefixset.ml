@@ -16,7 +16,7 @@
 
 open Bitlib_prereq
 
-type prefix = Bitstring.t
+type prefix = Bitpath.t
 
 let get_bit n x = (x lsr n) land 1 = 1
 
@@ -25,22 +25,22 @@ let lowmasked n x = x land ((1 lsl n) - 1)
 type t =
    | Bot | Top
    | Y of t * t
-   | P of Bitstring.t * t
+   | P of Bitpath.t * t
 
 (* Canonicalizing variant of P. *)
 let rec unzoom p s =
-    if Bitstring.length p = 0 then s else
+    if Bitpath.length p = 0 then s else
     match s with
       | Bot -> Bot
-      | P (p', s') -> P (Bitstring.cat p p', s')
+      | P (p', s') -> P (Bitpath.cat p p', s')
       | _ -> P (p, s)
 
 (* Canonicalizing variant of Y. *)
 let appose sL sR = match sL, sR with
   | Top, Top -> Top
   | Bot, Bot -> Bot
-  | _, Bot -> unzoom (Bitstring.init 1 (konst false)) sL
-  | Bot, _ -> unzoom (Bitstring.init 1 (konst true)) sR
+  | _, Bot -> unzoom (Bitpath.init 1 (konst false)) sL
+  | Bot, _ -> unzoom (Bitpath.init 1 (konst true)) sR
   | _ -> Y (sL, sR)
 
 let rec valid = function
@@ -51,13 +51,13 @@ let rec valid = function
   | Y (s0, s1) -> valid s0 && valid s1
   | P (p, Bot) -> false
   | P (p, P _) -> false
-  | P (p, s) -> Bitstring.length p > 0 && valid s
+  | P (p, s) -> Bitpath.length p > 0 && valid s
 
 let rec equal sL sR = match sL, sR with
   | Top, Top -> true
   | Bot, Bot -> true
   | Y (sL0, sL1), Y (sR0, sR1) -> equal sL0 sR0 && equal sL1 sR1
-  | P (pL, sL0), P (pR, sR0) -> Bitstring.equal pL pR && equal sL0 sR0
+  | P (pL, sL0), P (pR, sR0) -> Bitpath.equal pL pR && equal sL0 sR0
   | Top, _ | Bot, _ | Y _, _ | P _, _ -> false
 
 let empty = Bot
@@ -67,43 +67,43 @@ let universe = Top
 let is_universe = function Top -> true | _ -> false
 
 let of_prefix p =
-    if Bitstring.length p = 0 then Top else
+    if Bitpath.length p = 0 then Top else
     P (p, Top)
 let is_prefix = function
   | Top -> true
   | P (p, Top) -> true
   | _ -> false
 let to_prefix = function
-  | Top -> Bitstring.empty
+  | Top -> Bitpath.empty
   | P (p, Top) -> p
-  | _ -> invalid_arg "Bitstring.to_prefix: Not a basis set."
+  | _ -> invalid_arg "Bitpath.to_prefix: Not a basis set."
 
 let lower_half = function
   | Bot -> Bot | Top -> Top
   | Y (s, _) -> s
-  | P (p, s) -> if Bitstring.get 0 p then Bot else
-		unzoom (Bitstring.suffix 1 p) s
+  | P (p, s) -> if Bitpath.get 0 p then Bot else
+		unzoom (Bitpath.suffix 1 p) s
 
 let upper_half = function
   | Bot -> Bot | Top -> Top
   | Y (_, s) -> s
-  | P (p, s) -> if not (Bitstring.get 0 p) then Bot else
-		unzoom (Bitstring.suffix 1 p) s
+  | P (p, s) -> if not (Bitpath.get 0 p) then Bot else
+		unzoom (Bitpath.suffix 1 p) s
 
 let rec zoom pG s =
-    let nG = Bitstring.length pG in
+    let nG = Bitpath.length pG in
     let rec loop iG s =
 	if iG = nG then s else
 	match s with
 	  | Bot -> Bot
 	  | Top -> Top
 	  | Y (s0, s1) ->
-	    loop (iG + 1) (if Bitstring.get iG pG then s1 else s0)
+	    loop (iG + 1) (if Bitpath.get iG pG then s1 else s0)
 	  | P (p0, s0) ->
-	    let n0 = Bitstring.length p0 in
-	    let n = Bitstring.coslice_length iG pG 0 p0 in
+	    let n0 = Bitpath.length p0 in
+	    let n = Bitpath.coslice_length iG pG 0 p0 in
 	    if n = n0 then loop (iG + n) s0 else
-	    if n = nG - iG then P (Bitstring.slice n n0 p0, s0) else
+	    if n = nG - iG then P (Bitpath.slice n n0 p0, s0) else
 	    Bot in
     loop 0 s
 
@@ -115,27 +115,27 @@ let rec disjoint sA sB = match sA, sB with
   | _, P (pB, sBI) -> disjoint (zoom pB sA) sBI
 
 let rec modify pG f s =
-    let nG = Bitstring.length pG in
+    let nG = Bitpath.length pG in
     let rec loop iG s =
 	if iG = nG then f s else
 	match s with
 	  | Bot | Top ->
-	    if Bitstring.get iG pG then appose s (loop (iG + 1) s)
+	    if Bitpath.get iG pG then appose s (loop (iG + 1) s)
 				   else appose (loop (iG + 1) s) s
 	  | Y (s0, s1) ->
-	    if Bitstring.get iG pG then appose s0 (loop (iG + 1) s1)
+	    if Bitpath.get iG pG then appose s0 (loop (iG + 1) s1)
 				   else appose (loop (iG + 1) s0) s1
 	  | P (p0, s0) ->
-	    let n0 = Bitstring.length p0 in
-	    let n = Bitstring.coslice_length iG pG 0 p0 in
+	    let n0 = Bitpath.length p0 in
+	    let n = Bitpath.coslice_length iG pG 0 p0 in
 	    if n = n0 then unzoom p0 (loop (iG + n) s0) else
 	    let s_new =
-		if iG + n = nG then f (P (Bitstring.slice n n0 p0, s0)) else
-		let s_unm = unzoom (Bitstring.slice (n + 1) n0 p0) s0 in
-		let s_mod = unzoom (Bitstring.slice (iG+n+1) nG pG) (f Bot) in
-		if Bitstring.get n p0 then (appose s_mod s_unm)
+		if iG + n = nG then f (P (Bitpath.slice n n0 p0, s0)) else
+		let s_unm = unzoom (Bitpath.slice (n + 1) n0 p0) s0 in
+		let s_mod = unzoom (Bitpath.slice (iG+n+1) nG pG) (f Bot) in
+		if Bitpath.get n p0 then (appose s_mod s_unm)
 				      else (appose s_unm s_mod) in
-	    unzoom (Bitstring.prefix n p0) s_new in
+	    unzoom (Bitpath.prefix n p0) s_new in
     loop 0 s
 
 let add p = modify p (konst Top)
@@ -146,10 +146,10 @@ let prefix_fold f =
     let rec loop p = function
       | Bot -> ident
       | Top -> f p
-      | Y (s0, s1) -> loop (Bitstring.cat p (Bitstring.const 1 true)) s1
-		   |< loop (Bitstring.cat p (Bitstring.const 1 false)) s0
-      | P (p0, s0) -> loop (Bitstring.cat p p0) s0 in
-    loop Bitstring.empty
+      | Y (s0, s1) -> loop (Bitpath.cat p (Bitpath.const 1 true)) s1
+		   |< loop (Bitpath.cat p (Bitpath.const 1 false)) s0
+      | P (p0, s0) -> loop (Bitpath.cat p p0) s0 in
+    loop Bitpath.empty
 
 let prefix_iter f s = prefix_fold (fun x () -> f x) s ()
 
@@ -192,10 +192,10 @@ let rec abs_compl = function
   | Top -> Bot
   | Y (s0, s1) -> appose (abs_compl s0) (abs_compl s1)
   | P (p0, s0) ->
-    let n0 = Bitstring.length p0 in
+    let n0 = Bitpath.length p0 in
     let rec loop i0 =
 	if i0 = n0 then abs_compl s0 else
-	if Bitstring.get i0 p0 then appose Top (loop (i0 + 1))
+	if Bitpath.get i0 p0 then appose Top (loop (i0 + 1))
 			       else appose (loop (i0 + 1)) Top in
     loop 0
 
@@ -233,4 +233,4 @@ let rec dump chan = function
     output_string chan ", ";
     dump chan s1;
     output_char chan ')'
-  | P (p, s) -> output_string chan (Bitstring.to_string p); dump chan s
+  | P (p, s) -> output_string chan (Bitpath.to_string p); dump chan s

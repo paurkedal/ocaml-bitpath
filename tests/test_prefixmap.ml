@@ -23,7 +23,7 @@ module Ipm = Prefixmap.Make
 let (===) = Ipm.equal
 let (---) mA mB = Ipm.map (konst 0) mA === Ipm.map (konst 0) mB
 
-let random_bitstring n = Bitstring.init n (fun _ -> Random.bool ())
+let random_bitstring n = Bitpath.init n (fun _ -> Random.bool ())
 
 let random_prefixmap max_width =
     if max_width = 0 then
@@ -47,7 +47,7 @@ let show_prefixmap sv s =
 	Ipm.iteri (fun p x ->
 	    if !count > 0 then print_string ", ";
 	    count := !count + 1;
-	    if Bitstring.length p > 0 then print_string (Bitstring.to_string p);
+	    if Bitpath.length p > 0 then print_string (Bitpath.to_string p);
 	    print_string "* ↦ ";
 	    print_int x) s;
 	printf "}\n"
@@ -114,7 +114,7 @@ let test () =
     assert (Ipm.to_const const1 == 1);
     assert (Ipm.appose const2 const2 === const2);
     assert (Ipm.appose Ipm.empty const1 ===
-	    Ipm.unzoom (Bitstring.const 1 true) const1);
+	    Ipm.unzoom (Bitpath.const 1 true) const1);
     assert (Ipm.card Ipm.empty == 0);
     assert (Ipm.card const2 == 1);
 

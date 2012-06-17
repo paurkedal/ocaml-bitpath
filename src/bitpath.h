@@ -14,58 +14,58 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef BITLIB_BITSTRING_H
-#define BITLIB_BITSTRING_H
+#ifndef BITPATH_H
+#define BITPATH_H
 
 #include "prereq.h"
 #include <limits.h>
 #include <stdint.h>
 #include <stdlib.h>
 
-BITLIB_BEGIN_DECLS
+BITPATH_BEGIN_DECLS
 
-#define BITLIB_BITSTRING_INLINED 1
+#define BITPATH_INLINED 1
 
-#ifndef BITLIB_WORD_WIDTH
+#ifndef BITPATH_WORD_WIDTH
 #  if ULONG_MAX >= UINT64_MAX
-#    define BITLIB_WORD_WIDTH 64
+#    define BITPATH_WORD_WIDTH 64
 #  else
-#    define BITLIB_WORD_WIDTH 32
+#    define BITPATH_WORD_WIDTH 32
 #  endif
 #endif
-#define BITLIB_WORD_SIZE (BITLIB_WORD_WIDTH / 8)
+#define BITPATH_WORD_SIZE (BITPATH_WORD_WIDTH / 8)
 
-#if BITLIB_WORD_WIDTH == 64
-typedef uint64_t bitlib_word_t;
-#  define BITLIB_WORD_C UINT64_C
+#if BITPATH_WORD_WIDTH == 64
+typedef uint64_t bitpath_word_t;
+#  define BITPATH_WORD_C UINT64_C
 #else
-typedef uint32_t bitlib_word_t;
-#  define BITLIB_WORD_C UINT32_C
+typedef uint32_t bitpath_word_t;
+#  define BITPATH_WORD_C UINT32_C
 #endif
 
-typedef struct bitlib_bitstring *bitlib_bitstring_t;
+typedef struct bitpath *bitpath_t;
 
-struct bitlib_bitstring
+struct bitpath
 {
     size_t len;
-#ifdef BITLIB_BITSTRING_INLINED
-    bitlib_word_t arr[1];
+#ifdef BITPATH_INLINED
+    bitpath_word_t arr[1];
 #else
-    bitlib_word_t *arr;
+    bitpath_word_t *arr;
 #endif
 };
 
-#define BITLIB_BITSTRING(v) ((bitlib_bitstring_t)Data_custom_val(v))
+#define BITPATH(v) ((bitpath_t)Data_custom_val(v))
 
-BITLIB_SINLINE size_t bitlib_bitstring_length(bitlib_bitstring_t s)
+BITPATH_SINLINE size_t bitpath_length(bitpath_t s)
 { return s->len; }
 
-BITLIB_SINLINE bitlib_word_t *bitlib_bitstring_array(bitlib_bitstring_t s)
+BITPATH_SINLINE bitpath_word_t *bitpath_array(bitpath_t s)
 { return s->arr; }
 
-BITLIB_SINLINE size_t bitlib_bitstring_array_length(bitlib_bitstring_t s)
-{ return (s->len + BITLIB_WORD_WIDTH - 1) / BITLIB_WORD_WIDTH; }
+BITPATH_SINLINE size_t bitpath_array_length(bitpath_t s)
+{ return (s->len + BITPATH_WORD_WIDTH - 1) / BITPATH_WORD_WIDTH; }
 
-BITLIB_END_DECLS
+BITPATH_END_DECLS
 
 #endif
