@@ -14,7 +14,7 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *)
 
-(** [Prefixset.t] models sets of infinitely long bit-strings which can be
+(** [Bitpath_cover.t] models sets of infinitely long bit-strings which can be
     described by a finite set of prefixes common to the members.  These sets
     can also be considered subsets of unit interval \[0, 1\] in which case
     prefixes are the leading decimals of the binary representation of

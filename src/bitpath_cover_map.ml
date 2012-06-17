@@ -46,7 +46,9 @@ module Poly = struct
 
     let const x = U x
     let is_const = function U _ -> true | _ -> false
-    let to_const = function U x -> x | _ -> invalid_arg "Prefixmap.get"
+    let to_const = function
+      | U x -> x
+      | _ -> invalid_arg "Bitpath_cover_map.to_const"
 
     let lower_half = function
       | E -> E

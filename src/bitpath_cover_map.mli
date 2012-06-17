@@ -14,12 +14,12 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *)
 
-(** The [Prefixmap] implements a mappings from sets of infinite bit-strings,
-    representable by a finite set of common prefixes.  In other words, the
-    domain has the same structure as the sets modelled by [Prefixset].  Both
-    polymorphic and a functor variants are provided to abstract over the
-    codomain, though the former only contains the part of the API which do not
-    depend on equality. *)
+(** The [Bitpath_cover_map] implements a mappings from sets of infinite
+    bit-strings, representable by a finite set of common prefixes.  In other
+    words, the domain has the same structure as the sets modelled by
+    [Bitpath_cover].  Both polymorphic and a functor variants are provided to
+    abstract over the codomain, though the former only contains the part of
+    the API which do not depend on equality. *)
 
 (** The signature for types with an equality predicate. *)
 module type Equatable = sig

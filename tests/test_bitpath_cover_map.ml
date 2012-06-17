@@ -17,7 +17,7 @@
 open Printf
 open Bitpath_prereq
 
-module Ipm = Prefixmap.Make
+module Ipm = Bitpath_cover_map.Make
     (struct  type t = int  let equal : t -> t -> bool = (=)  end)
 
 let (===) = Ipm.equal
@@ -25,7 +25,7 @@ let (---) mA mB = Ipm.map (konst 0) mA === Ipm.map (konst 0) mB
 
 let random_bitstring n = Bitpath.init n (fun _ -> Random.bool ())
 
-let random_prefixmap max_width =
+let random_bitpath_cover_map max_width =
     if max_width = 0 then
 	if Random.bool () then Ipm.const 0 else Ipm.empty else
     let width = Random.int max_width in
@@ -39,7 +39,7 @@ let random_prefixmap max_width =
 
 let verbose = ref false
 
-let show_prefixmap sv s =
+let show_map sv s =
     if not !verbose then () else
     begin
 	printf "%s = {" sv;
@@ -55,10 +55,10 @@ let show_prefixmap sv s =
     flush stdout
 
 let test_one max_width =
-    let sA = random_prefixmap max_width in
-    let sB = random_prefixmap max_width in
-    show_prefixmap "A" sA;
-    show_prefixmap "B" sB;
+    let sA = random_bitpath_cover_map max_width in
+    let sB = random_bitpath_cover_map max_width in
+    show_map "A" sA;
+    show_map "B" sB;
     assert (Ipm.valid sA);
     assert (Ipm.valid sB);
 
@@ -83,8 +83,8 @@ let test_one max_width =
 
     let sAuB = Ipm.right_union sA sB in
     let sAnB = Ipm.right_isecn sA sB in
-    show_prefixmap "A ∪ B" sAuB;
-    show_prefixmap "A ∩ B" sAnB;
+    show_map "A ∪ B" sAuB;
+    show_map "A ∩ B" sAnB;
     assert (Ipm.valid sAuB);
     assert (Ipm.valid sAnB);
     assert (sAuB --- Ipm.right_union sB sA); (* A ∪ B = B ∪ A *)

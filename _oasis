@@ -9,7 +9,7 @@ BuildTools:	ocamlbuild
 
 Library bitpath
   Path:		src
-  Modules:	Bitpath_prereq, Bitpath, Prefixset, Prefixmap
+  Modules:	Bitpath_prereq, Bitpath, Bitpath_cover, Bitpath_cover_map
   CSources:	prereq.h, bitpath.h, bitpath_stubs.c
   CCOpt:	-I../src -Wall -g -O2
   DataFiles:
