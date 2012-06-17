@@ -14,6 +14,12 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *)
 
+(** Utilities and overlays for standard library structures used by the Bitpath
+    library itself.
+
+    This is not meant to provide a complete supplement to the standard library
+    as it is mainly for internal needs.  Use at your own discretion. *)
+
 val ident : 'a -> 'a
 val konst : 'a -> 'b -> 'a
 val ( |< ) : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
