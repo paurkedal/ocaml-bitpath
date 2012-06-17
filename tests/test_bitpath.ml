@@ -15,7 +15,7 @@
  *)
 
 open Printf
-open Bitlib_prereq
+open Bitpath_prereq
 open OUnit
 
 let assert_streq = assert_equal ~printer:Bitpath.to_string

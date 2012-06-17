@@ -14,7 +14,7 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *)
 
-open Bitlib_prereq
+open Bitpath_prereq
 
 type prefix = Bitpath.t
 

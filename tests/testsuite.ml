@@ -1,6 +1,6 @@
 open OUnit
 
-let suite = "Bitlib Test Suite" >::: [
+let suite = "Bitpath Test Suite" >::: [
     "test_bitpath" >:: Test_bitpath.test;
     "test_prefixset" >:: Test_prefixset.test;
     "test_prefixmap" >:: Test_prefixmap.test;

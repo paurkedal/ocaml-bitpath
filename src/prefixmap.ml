@@ -14,7 +14,7 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *)
 
-open Bitlib_prereq
+open Bitpath_prereq
 
 let bitstring_0 = Bitpath.const 1 false
 let bitstring_1 = Bitpath.const 1 true

@@ -15,7 +15,7 @@
  *)
 
 open Printf
-open Bitlib_prereq
+open Bitpath_prereq
 
 module Ipm = Prefixmap.Make
     (struct  type t = int  let equal : t -> t -> bool = (=)  end)

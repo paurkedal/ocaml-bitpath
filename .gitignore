@@ -1,8 +1,9 @@
 /_build
 /_tags
 /src/META
-/src/bitlib.mllib
-/src/libbitlib_stubs.clib
+/src/bitpath.mllib
+/src/bitpath.odocl
+/src/libbitpath_stubs.clib
 /myocamlbuild.ml
 /setup.data
 /setup.log

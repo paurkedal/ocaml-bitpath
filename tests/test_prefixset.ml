@@ -15,7 +15,7 @@
  *)
 
 open Printf
-open Bitlib_prereq
+open Bitpath_prereq
 
 let (===) = Prefixset.equal
 

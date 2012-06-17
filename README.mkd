@@ -36,7 +36,7 @@ You may want to adjust the last command to something like
 
     sudo -u godi ocaml setup.ml -install
 
-The installed package is named `bitlib` and can be used with `ocamlfind`.
+The installed package is named `bitpath` and can be used with `ocamlfind`.
 
 
 [ounit]: http://ounit.forge.ocamlcore.org/
