@@ -55,6 +55,9 @@ val equal : t -> t -> bool
 val empty : t
 (** The empty bit-string. *)
 
+val is_empty : t -> bool
+(** True on the empty path, elsewhere false. *)
+
 external init : int -> (int -> bool) -> t = "camlbitpath_init"
 (** [init n f] turns the predicate [f] into a bit-string [s] of length [n]
     such that [f i = get f i] for 0 ≤ [i] < [n]. *)

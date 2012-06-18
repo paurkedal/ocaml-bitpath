@@ -35,6 +35,8 @@ external get : int -> t -> bool = "camlbitpath_get"
 external get8 : int -> t -> int = "camlbitpath_get8"
 external get16 : int -> t -> int = "camlbitpath_get16"
 
+let is_empty p = length p = 0
+
 external compare : t -> t -> int = "camlbitpath_compare"
 let equal sA sB = compare sA sB = 0
 
