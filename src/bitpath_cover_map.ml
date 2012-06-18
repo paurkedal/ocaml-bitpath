@@ -80,6 +80,19 @@ module Poly = struct
 		E in
 	loop 0 m
 
+    let cover_find pG m =
+	let nG = Bitpath.length pG in
+	let rec loop iG = function
+	  | E -> raise Not_found
+	  | U x -> Bitpath.prefix iG pG
+	  | Y (m0, m1) ->
+	    if iG = nG then raise Not_found else
+	    loop (iG + 1) (if Bitpath.get iG pG then m1 else m0)
+	  | P (p, mI) ->
+	    if not (Bitpath.has_slice p iG pG) then raise Not_found else
+	    loop (iG + Bitpath.length p) mI in
+	loop 0 m
+
     let rec disjoint mA mB = match mA, mB with
       | E, _ | _, E -> true
       | U _, _ | _, U _ -> false
@@ -160,6 +173,7 @@ module Make (C : Equatable) = struct
     let upper_half = upper_half
     let unzoom = unzoom
     let zoom = zoom
+    let cover_find = cover_find
     let remove = remove
     let intersect = intersect
 

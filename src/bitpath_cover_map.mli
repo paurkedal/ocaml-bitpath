@@ -50,6 +50,7 @@ module Poly : sig
 
     val unzoom : prefix -> 'a t -> 'a t
     val zoom : prefix -> 'a t -> 'a t
+    val cover_find : prefix -> 'a t -> prefix
 
     val remove : prefix -> 'a t -> 'a t
     val intersect : prefix -> 'a t -> 'a t
@@ -87,6 +88,7 @@ module Make (C : Equatable) : sig
 
     val unzoom : prefix -> t -> t
     val zoom : prefix -> t -> t
+    val cover_find : prefix -> t -> prefix
 
     val add : prefix -> codomain -> t -> t
     val remove : prefix -> t -> t

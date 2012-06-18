@@ -74,6 +74,10 @@ val unzoom : prefix -> t -> t
 val zoom : prefix -> t -> t
 (** [zoom p s] is the set [{p' | p·p' ∈ s}]. *)
 
+val cover_find : prefix -> t -> prefix
+(** [cover_find p s] returns the cover of [p] in [s] or raises Not_found is no
+    such cover exist in [s]. *)
+
 val add : prefix -> t -> t
 (** [add p s] is the union [s ∪ of_prefix p]. *)
 

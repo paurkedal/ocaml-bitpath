@@ -90,7 +90,7 @@ let upper_half = function
   | P (p, s) -> if not (Bitpath.get 0 p) then Bot else
 		unzoom (Bitpath.suffix 1 p) s
 
-let rec zoom pG s =
+let zoom pG s =
     let nG = Bitpath.length pG in
     let rec loop iG s =
 	if iG = nG then s else
@@ -105,6 +105,19 @@ let rec zoom pG s =
 	    if n = n0 then loop (iG + n) s0 else
 	    if n = nG - iG then P (Bitpath.slice n n0 p0, s0) else
 	    Bot in
+    loop 0 s
+
+let cover_find pG s =
+    let nG = Bitpath.length pG in
+    let rec loop iG = function
+      | Bot -> raise Not_found
+      | Top -> Bitpath.prefix iG pG
+      | Y (s0, s1) ->
+	if iG = nG then raise Not_found else
+	loop (iG + 1) (if Bitpath.get iG pG then s1 else s0)
+      | P (p, sI) ->
+	if not (Bitpath.has_slice p iG pG) then raise Not_found else
+	loop (iG + Bitpath.length p) sI in
     loop 0 s
 
 let rec disjoint sA sB = match sA, sB with

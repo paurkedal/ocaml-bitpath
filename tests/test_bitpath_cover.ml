@@ -19,7 +19,7 @@ open Bitpath_prereq
 
 let (===) = Bitpath_cover.equal
 
-let random_bitstring n = Bitpath.init n (fun _ -> Random.bool ())
+let random_bitpath n = Bitpath.init n (fun _ -> Random.bool ())
 
 let random_bitpath_cover max_width =
     if max_width = 0 then
@@ -28,7 +28,7 @@ let random_bitpath_cover max_width =
     let width = Random.int max_width in
     let rec loop n_add s =
 	if n_add = 0 then s else
-	let p = random_bitstring width in
+	let p = random_bitpath width in
 	loop (n_add - 1) (Bitpath_cover.add p s) in
     let n_add = 1 lsl width in
     loop n_add Bitpath_cover.empty
@@ -61,6 +61,12 @@ let test_one max_width =
 
     assert (Bitpath_cover.cover_card sA =
 	    Bitpath_cover.fold (fun _ -> (+) 1) sA 0);
+
+    Bitpath_cover.iter
+	(fun p ->
+	    let p' = random_bitpath 4 in
+	    assert (Bitpath_cover.cover_find (Bitpath.cat p p') sA = p))
+	sA;
 
     let sAuB = Bitpath_cover.union sA sB in
     let sAnB = Bitpath_cover.isecn sA sB in
