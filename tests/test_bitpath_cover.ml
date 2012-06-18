@@ -40,7 +40,7 @@ let show_set sv s =
     if true then begin
 	printf "%s = {" sv;
 	let count = ref 0 in
-	Bitpath_cover.prefix_iter (fun x ->
+	Bitpath_cover.iter (fun x ->
 	    if !count > 0 then print_string ", ";
 	    count := !count + 1;
 	    if Bitpath.length x > 0 then print_string (Bitpath.to_string x);
@@ -59,8 +59,8 @@ let test_one max_width =
     assert (Bitpath_cover.valid sA);
     assert (Bitpath_cover.valid sB);
 
-    assert (Bitpath_cover.prefix_card sA =
-	    Bitpath_cover.prefix_fold (fun _ -> (+) 1) sA 0);
+    assert (Bitpath_cover.cover_card sA =
+	    Bitpath_cover.fold (fun _ -> (+) 1) sA 0);
 
     let sAuB = Bitpath_cover.union sA sB in
     let sAnB = Bitpath_cover.isecn sA sB in
@@ -108,8 +108,8 @@ let test_one max_width =
     let sPcN = Bitpath_cover.rel_compl sN sP in
     show_set "P ∖ N" sPcN;
     assert (sPcN === sA);
-    assert (Bitpath_cover.prefix_card sP + Bitpath_cover.prefix_card sN <=
-	    Bitpath_cover.prefix_card sA)
+    assert (Bitpath_cover.cover_card sP + Bitpath_cover.cover_card sN <=
+	    Bitpath_cover.cover_card sA)
 
 let test () =
     Arg.parse [("-v", Arg.Set verbose, "Dump computed values.")] (konst ()) "";

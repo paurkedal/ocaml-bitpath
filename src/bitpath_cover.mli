@@ -86,16 +86,15 @@ val intersect : prefix -> t -> t
 val modify : prefix -> (t -> t) -> t -> t
 (** [modify f p s] is the set [s ∖ of_prefix p ∪ unzoom (f (zoom s))]. *)
 
-val prefix_fold : (prefix -> 'a -> 'a) -> t -> 'a -> 'a
-(** [prefix_fold f s] is the function [f p_(n-1) ∘ ⋯ ∘ f p_0] where [{p_i}]
-    is the minimal set of prefixes which cover [s]. *)
+val fold : (prefix -> 'a -> 'a) -> t -> 'a -> 'a
+(** [fold f s] is the function [f p_(n-1) ∘ ⋯ ∘ f p_0] where [{p_i}] is the
+    minimal set of prefixes which cover [s]. *)
 
-val prefix_iter : (prefix -> unit) -> t -> unit
-(** [prefix_iter f s] calls [f] for each prefix in the minimal cover for
-    [s]. *)
+val iter : (prefix -> unit) -> t -> unit
+(** [iter f s] calls [f] for each prefix in the minimal cover for [s]. *)
 
-val prefix_card : t -> int
-(** [prefix_card s] is the cardinality of the minimal set of prefixes which
+val cover_card : t -> int
+(** [cover_card s] is the cardinality of the minimal set of prefixes which
     cover of [s]. *)
 
 val isecn : t -> t -> t

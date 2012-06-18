@@ -142,7 +142,7 @@ let add p = modify p (konst Top)
 let remove p = modify p (konst Bot)
 let intersect p s = unzoom p (zoom p s)
 
-let prefix_fold f =
+let fold f =
     let rec loop p = function
       | Bot -> ident
       | Top -> f p
@@ -151,13 +151,13 @@ let prefix_fold f =
       | P (p0, s0) -> loop (Bitpath.cat p p0) s0 in
     loop Bitpath.empty
 
-let prefix_iter f s = prefix_fold (fun x () -> f x) s ()
+let iter f s = fold (fun x () -> f x) s ()
 
-let rec prefix_card = function
+let rec cover_card = function
   | Bot -> 0
   | Top -> 1
-  | Y (s0, s1) -> prefix_card s0 + prefix_card s1
-  | P (p, s) -> prefix_card s
+  | Y (s0, s1) -> cover_card s0 + cover_card s1
+  | P (p, s) -> cover_card s
 
 let rec isecn sL sR = match sL, sR with
   | Bot, _ -> Bot
@@ -217,7 +217,7 @@ let rec compl_decomp = function
     let sR = appose sR0 sR1 in
     let sC = appose sC0 sC1 in
     let sA = appose (abs_compl s0) (abs_compl s1) in
-    if prefix_card sR + prefix_card sC <= 1 + prefix_card sA
+    if cover_card sR + cover_card sC <= 1 + cover_card sA
 	then (sC, sR)
 	else (sA, Top)
   | P (p0, s0) ->

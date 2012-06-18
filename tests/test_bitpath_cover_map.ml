@@ -62,7 +62,7 @@ let test_one max_width =
     assert (Ipm.valid sA);
     assert (Ipm.valid sB);
 
-    assert (Ipm.card sA = Ipm.fold (fun _ -> (+) 1) sA 0);
+    assert (Ipm.cover_card sA = Ipm.fold (fun _ -> (+) 1) sA 0);
 
     assert ((sA === sB) == (sB === sA));
 
@@ -115,8 +115,8 @@ let test () =
     assert (Ipm.appose const2 const2 === const2);
     assert (Ipm.appose Ipm.empty const1 ===
 	    Ipm.unzoom (Bitpath.const 1 true) const1);
-    assert (Ipm.card Ipm.empty == 0);
-    assert (Ipm.card const2 == 1);
+    assert (Ipm.cover_card Ipm.empty == 0);
+    assert (Ipm.cover_card const2 == 1);
 
     for testnum = 0 to 999 do
 	test_one (Random.int 12)

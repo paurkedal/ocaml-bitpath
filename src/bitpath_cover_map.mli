@@ -54,7 +54,7 @@ module Poly : sig
     val remove : prefix -> 'a t -> 'a t
     val intersect : prefix -> 'a t -> 'a t
 
-    val card : 'a t -> int
+    val cover_card : 'a t -> int
 
     val fold : ('a -> 'b -> 'b) -> 'a t -> 'b -> 'b
     val foldi : (prefix -> 'a -> 'b -> 'b) -> 'a t -> 'b -> 'b
@@ -93,7 +93,7 @@ module Make (C : Equatable) : sig
     val intersect : prefix -> t -> t
     val modify : prefix -> (t -> t) -> t -> t
 
-    val card : t -> int
+    val cover_card : t -> int
 
     val fold : (codomain -> 'a -> 'a) -> t -> 'a -> 'a
     val foldi : (prefix -> codomain -> 'a -> 'a) -> t -> 'a -> 'a

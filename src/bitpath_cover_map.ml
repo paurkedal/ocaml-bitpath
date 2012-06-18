@@ -139,7 +139,7 @@ module Poly = struct
 	  | P (pI, mI) -> loop (Bitpath.cat p pI) mI in
 	loop Bitpath.empty
 
-    let card m = fold (fun _ -> (+) 1) m 0
+    let cover_card m = fold (fun _ -> (+) 1) m 0
 end
 
 module Make (C : Equatable) = struct
@@ -213,7 +213,7 @@ module Make (C : Equatable) = struct
     let add p x = modify p (konst (U x))
     let remove p = modify p (konst E)
 
-    let card = card
+    let cover_card = cover_card
     let fold = fold
     let foldi = foldi
     let iter = iter
