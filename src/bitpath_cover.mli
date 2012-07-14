@@ -57,6 +57,14 @@ val to_prefix : t -> prefix
 (** If [is_prefix s], then [to_prefix s] returns the [p] such that [equal s
     (of_prefix p)], otherwise it raises [Invalid_argument]. *)
 
+val pick_first : t -> prefix
+(** [pick_first s] returns the lexicographically lowest prefix describing a
+    cover in [s]. *)
+
+val pick_random : t -> prefix
+(** [pick_random s] returns a random prefix of [s], using the PRNG from the
+    [Random] module. *)
+
 val appose : t -> t -> t
 (** [appose sA sB] is the set whose lower and upper halves are [sA] and [sB]
     shrunk to half their size by prefixing their elements by [0] and [1],

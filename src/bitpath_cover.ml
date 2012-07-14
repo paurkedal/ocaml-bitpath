@@ -14,6 +14,10 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *)
 
+(* TODO:  Some operations using Bitpath.cat below and in Bitpath_cover_map
+ * could be optimized using a new Bitbuffer module, though it's probably minor
+ * in most cases, as bitpaths used here will typically be of limited length. *)
+
 open Bitpath_prereq
 
 type prefix = Bitpath.t
@@ -77,6 +81,25 @@ let to_prefix = function
   | Top -> Bitpath.empty
   | P (p, Top) -> p
   | _ -> invalid_arg "Bitpath.to_prefix: Not a basis set."
+
+let pick_first =
+    let rec dive p = function
+      | Bot -> raise Not_found
+      | Top -> p
+      | Y (s0, s1) -> dive (Bitpath.cat p Bitpath.c0) s0
+      | P (p', s') -> dive (Bitpath.cat p p') s' in
+    dive Bitpath.empty
+
+let pick_random =
+    let rec dive p = function
+      | Bot -> raise Not_found
+      | Top -> Bitpath.empty
+      | Y (s0, s1) ->
+	if Random.bool ()
+	then dive (Bitpath.cat p Bitpath.c1) s1
+	else dive (Bitpath.cat p Bitpath.c0) s0
+      | P (p', s') -> dive (Bitpath.cat p p') s' in
+    dive Bitpath.empty
 
 let lower_half = function
   | Bot -> Bot | Top -> Top
@@ -159,8 +182,8 @@ let fold f =
     let rec loop p = function
       | Bot -> ident
       | Top -> f p
-      | Y (s0, s1) -> loop (Bitpath.cat p (Bitpath.const 1 true)) s1
-		   |< loop (Bitpath.cat p (Bitpath.const 1 false)) s0
+      | Y (s0, s1) -> loop (Bitpath.cat p Bitpath.c1) s1
+		   |< loop (Bitpath.cat p Bitpath.c0) s0
       | P (p0, s0) -> loop (Bitpath.cat p p0) s0 in
     loop Bitpath.empty
 

@@ -44,6 +44,8 @@ module Poly : sig
     val const : 'a -> 'a t
     val is_const : 'a t -> bool
     val to_const : 'a t -> 'a
+    val picki_first : 'a t -> prefix * 'a
+    val picki_random : 'a t -> prefix * 'a
 
     val lower_half : 'a t -> 'a t
     val upper_half : 'a t -> 'a t
@@ -81,6 +83,8 @@ module Make (C : Equatable) : sig
     val const : codomain -> t
     val is_const : t -> bool
     val to_const : t -> codomain
+    val picki_first : t -> prefix * codomain
+    val picki_random : t -> prefix * codomain
 
     val appose : t -> t -> t
     val lower_half : t -> t

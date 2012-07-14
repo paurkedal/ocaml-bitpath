@@ -27,6 +27,9 @@ external init16 : int -> (int -> int) -> t = "camlbitpath_init16"
 
 external const : int -> bool -> t = "camlbitpath_const"
 
+let c0 = const 1 false
+let c1 = const 1 true
+
 external length : t -> int = "camlbitpath_length"
 let length8 s = let n = length s in (n + 7) / 8
 let length16 s = let n = length s in (n + 15) / 16

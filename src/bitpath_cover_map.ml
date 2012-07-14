@@ -16,9 +16,6 @@
 
 open Bitpath_prereq
 
-let bitstring_0 = Bitpath.const 1 false
-let bitstring_1 = Bitpath.const 1 true
-
 module type Equatable = sig
     type t
     val equal : t -> t -> bool
@@ -49,6 +46,24 @@ module Poly = struct
     let to_const = function
       | U x -> x
       | _ -> invalid_arg "Bitpath_cover_map.to_const"
+
+    let picki_first m =
+	let rec dive p = function
+	  | E -> raise Not_found
+	  | U c -> (p, c)
+	  | Y (m, _) -> dive (Bitpath.cat p Bitpath.c0) m
+	  | P (p', m') -> dive (Bitpath.cat p p') m' in
+	dive Bitpath.empty m
+
+    let picki_random m =
+	let rec dive p = function
+	  | E -> raise Not_found
+	  | U c -> (p, c)
+	  | Y (m0, m1) ->
+	    if Random.bool () then dive (Bitpath.cat p Bitpath.c1) m1
+			      else dive (Bitpath.cat p Bitpath.c0) m0
+	  | P (p', m') -> dive (Bitpath.cat p p') m' in
+	dive Bitpath.empty m
 
     let lower_half = function
       | E -> E
@@ -132,8 +147,8 @@ module Poly = struct
 	let rec loop p = function
 	  | E -> ident
 	  | U c -> f p c
-	  | Y (m0, m1) -> loop (Bitpath.cat p bitstring_1) m1
-		       |< loop (Bitpath.cat p bitstring_0) m0
+	  | Y (m0, m1) -> loop (Bitpath.cat p Bitpath.c1) m1
+		       |< loop (Bitpath.cat p Bitpath.c0) m0
 	  | P (pI, mI) -> loop (Bitpath.cat p pI) mI in
 	loop Bitpath.empty
 
@@ -147,8 +162,8 @@ module Poly = struct
 	let rec loop p = function
 	  | E -> ()
 	  | U c -> f p c
-	  | Y (m0, m1) -> loop (Bitpath.cat p bitstring_0) m0;
-			  loop (Bitpath.cat p bitstring_1) m1
+	  | Y (m0, m1) -> loop (Bitpath.cat p Bitpath.c0) m0;
+			  loop (Bitpath.cat p Bitpath.c1) m1
 	  | P (pI, mI) -> loop (Bitpath.cat p pI) mI in
 	loop Bitpath.empty
 
@@ -169,6 +184,8 @@ module Make (C : Equatable) = struct
     let const = const
     let is_const = is_const
     let to_const = to_const
+    let picki_first = picki_first
+    let picki_random = picki_random
     let lower_half = lower_half
     let upper_half = upper_half
     let unzoom = unzoom
@@ -243,8 +260,8 @@ module Make (C : Equatable) = struct
 	let rec loop p = function
 	  | E -> E
 	  | U c -> U (f p c)
-	  | Y (m0, m1) -> appose (loop (Bitpath.cat p bitstring_0) m0)
-				 (loop (Bitpath.cat p bitstring_1) m1)
+	  | Y (m0, m1) -> appose (loop (Bitpath.cat p Bitpath.c0) m0)
+				 (loop (Bitpath.cat p Bitpath.c1) m1)
 	  | P (pI, mI) -> P (pI, loop (Bitpath.cat p pI) mI) in
 	loop Bitpath.empty
 

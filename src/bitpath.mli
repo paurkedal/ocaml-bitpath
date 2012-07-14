@@ -77,6 +77,12 @@ external init16 : int -> (int -> int) -> t = "camlbitpath_init16"
 external const : int -> bool -> t = "camlbitpath_const"
 (** [const n x] is the [n]-bit string of [x]. *)
 
+val c0 : t
+(** The constant [const 1 false]. *)
+
+val c1 : t
+(** The constant [const 1 true]. *)
+
 
 external bitnot : t -> t = "camlbitpath_not"
 (** [bitnot s] is the string [s'] such that [get i s = not (get i s')]. *)
