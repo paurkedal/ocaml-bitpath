@@ -1,10 +1,10 @@
 /_build
 /_tags
+/bitpath.docdir
 /src/META
 /src/bitpath.mllib
 /src/bitpath.odocl
 /src/libbitpath_stubs.clib
-/myocamlbuild.ml
 /setup.data
 /setup.log
 /setup.ml
