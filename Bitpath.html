@@ -1,0 +1,183 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=utf8" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="next" href="Bitpath_cover.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Bitpath" rel="Chapter" href="Bitpath.html">
+<link title="Bitpath_cover" rel="Chapter" href="Bitpath_cover.html">
+<link title="Bitpath_cover_map" rel="Chapter" href="Bitpath_cover_map.html">
+<link title="Bitpath_prereq" rel="Chapter" href="Bitpath_prereq.html"><title>Bitpath</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a href="index.html">Up</a>
+&nbsp;<a href="Bitpath_cover.html">Next</a>
+</div>
+<center><h1>Module <a href="type_Bitpath.html">Bitpath</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> Bitpath: <code class="code">sig</code> <a href="Bitpath.html">..</a> <code class="code">end</code></pre>The <code class="code">Bitpath</code> module implements strings of booleans.  The bits are
+    compactly represented packed into native words.  Core functions are
+    written in C to operate on full words.<br>
+<hr width="100%">
+<pre><span id="TYPEt"><span class="keyword">type</span> <code class="type"></code>t</span> </pre>
+<div class="info">
+The type of a bit-string, which represents zero or more consecutive
+    boolean values, indexed from 0.<br>
+</div>
+
+<pre><span id="VALlength"><span class="keyword">val</span> length</span> : <code class="type"><a href="Bitpath.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">length s</code> is the number of bits contained in <code class="code">s</code>.<br>
+</div>
+<pre><span id="VALlength8"><span class="keyword">val</span> length8</span> : <code class="type"><a href="Bitpath.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">length8 s = ⌈length s / 8⌉</code>.<br>
+</div>
+<pre><span id="VALlength16"><span class="keyword">val</span> length16</span> : <code class="type"><a href="Bitpath.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">length16 s = ⌈length s / 16⌉</code>.<br>
+</div>
+<pre><span id="VALget"><span class="keyword">val</span> get</span> : <code class="type">int -> <a href="Bitpath.html#TYPEt">t</a> -> bool</code></pre><div class="info">
+<code class="code">get i s</code> is true iff the <code class="code">i</code>th bit of <code class="code">s</code> is set.<br>
+</div>
+<pre><span id="VALget8"><span class="keyword">val</span> get8</span> : <code class="type">int -> <a href="Bitpath.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">get8 i s</code> is the integer with bit number <code class="code">7 - j</code> equal to bit number
+    <code class="code">8*i + j</code> of <code class="code">s</code>.<br>
+</div>
+<pre><span id="VALget16"><span class="keyword">val</span> get16</span> : <code class="type">int -> <a href="Bitpath.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">get16 i s</code> is the integer with bit number <code class="code">15 - j</code> equal to bit number
+    <code class="code">16*i + j</code> of <code class="code">s</code>.<br>
+</div>
+<pre><span id="VALcompare"><span class="keyword">val</span> compare</span> : <code class="type"><a href="Bitpath.html#TYPEt">t</a> -> <a href="Bitpath.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">compare sA sB</code> returns <code class="code">-1</code>, <code class="code">0</code>, or <code class="code">1</code> when <code class="code">sA</code> is less, equal, or
+    greater than <code class="code">sB</code>, respectively, according to lexicographical ordering of
+    bits.<br>
+</div>
+<pre><span id="VALequal"><span class="keyword">val</span> equal</span> : <code class="type"><a href="Bitpath.html#TYPEt">t</a> -> <a href="Bitpath.html#TYPEt">t</a> -> bool</code></pre><div class="info">
+<code class="code">equal sA sB</code> is true iff <code class="code">sA</code> and <code class="code">sB</code> are bitwise equal.<br>
+</div>
+<pre><span id="VALempty"><span class="keyword">val</span> empty</span> : <code class="type"><a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+The empty bit-string.<br>
+</div>
+<pre><span id="VALis_empty"><span class="keyword">val</span> is_empty</span> : <code class="type"><a href="Bitpath.html#TYPEt">t</a> -> bool</code></pre><div class="info">
+True on the empty path, elsewhere false.<br>
+</div>
+<pre><span id="VALinit"><span class="keyword">val</span> init</span> : <code class="type">int -> (int -> bool) -> <a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">init n f</code> turns the predicate <code class="code">f</code> into a bit-string <code class="code">s</code> of length <code class="code">n</code>
+    such that <code class="code">f i = get f i</code> for 0 ≤ <code class="code">i</code> &lt; <code class="code">n</code>.<br>
+</div>
+<pre><span id="VALinit8"><span class="keyword">val</span> init8</span> : <code class="type">int -> (int -> int) -> <a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">init8 n f</code> is the <code class="code">n</code>-bit string <code class="code">s</code> such that <code class="code">get (8*i + j) s</code> is
+    <code class="code">true</code> iff bit number <code class="code">7 - j</code> of <code class="code">f i</code> is set.  If <code class="code">n</code> is not a multiple
+    of <code class="code">8</code>, then the <code class="code">n mod 8</code> most significant bits of <code class="code">f (n / 8)</code> are used;
+    the rest are ignored.<br>
+</div>
+<pre><span id="VALinit16"><span class="keyword">val</span> init16</span> : <code class="type">int -> (int -> int) -> <a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">init16 n f</code> is the <code class="code">n</code>-bit string <code class="code">s</code> such that <code class="code">get (16*i + j) s</code> is
+    <code class="code">true</code> iff bit number <code class="code">15 - j</code> of <code class="code">f i</code> is set.  If <code class="code">n</code> is not a multiple
+    of <code class="code">16</code>, then the <code class="code">n mod 16</code> most significant bits of <code class="code">f (n / 16)</code> are
+    used; the rest are ignored.<br>
+</div>
+<pre><span id="VALconst"><span class="keyword">val</span> const</span> : <code class="type">int -> bool -> <a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">const n x</code> is the <code class="code">n</code>-bit string of <code class="code">x</code>.<br>
+</div>
+<pre><span id="VALc0"><span class="keyword">val</span> c0</span> : <code class="type"><a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+The constant <code class="code">const 1 false</code>.<br>
+</div>
+<pre><span id="VALc1"><span class="keyword">val</span> c1</span> : <code class="type"><a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+The constant <code class="code">const 1 true</code>.<br>
+</div>
+<pre><span id="VALbitnot"><span class="keyword">val</span> bitnot</span> : <code class="type"><a href="Bitpath.html#TYPEt">t</a> -> <a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">bitnot s</code> is the string <code class="code">s'</code> such that <code class="code">get i s = not (get i s')</code>.<br>
+</div>
+<pre><span id="VALslice"><span class="keyword">val</span> slice</span> : <code class="type">int -> int -> <a href="Bitpath.html#TYPEt">t</a> -> <a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">slice i j s</code> is the sub-string of bit <code class="code">i</code> to <code class="code">j - 1</code> of <code class="code">s</code>.<br>
+</div>
+<pre><span id="VALprefix"><span class="keyword">val</span> prefix</span> : <code class="type">int -> <a href="Bitpath.html#TYPEt">t</a> -> <a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">prefix i s</code> is the substring containing the <code class="code">i</code> first bits of <code class="code">s</code>.<br>
+</div>
+<pre><span id="VALsuffix"><span class="keyword">val</span> suffix</span> : <code class="type">int -> <a href="Bitpath.html#TYPEt">t</a> -> <a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">suffix i s</code> is the substring containing all but the <code class="code">i</code> first bits
+    of <code class="code">s</code>.<br>
+</div>
+<pre><span id="VALhas_slice"><span class="keyword">val</span> has_slice</span> : <code class="type"><a href="Bitpath.html#TYPEt">t</a> -> int -> <a href="Bitpath.html#TYPEt">t</a> -> bool</code></pre><div class="info">
+<code class="code">has_slice s0 i s</code> is true iff <code class="code">s</code> contains a substring equal to <code class="code">s0</code>
+    starting at bit number <code class="code">i</code>.<br>
+</div>
+<pre><span id="VALhas_prefix"><span class="keyword">val</span> has_prefix</span> : <code class="type"><a href="Bitpath.html#TYPEt">t</a> -> <a href="Bitpath.html#TYPEt">t</a> -> bool</code></pre><div class="info">
+<code class="code">has_prefix s0 s</code> is true iff <code class="code">s</code> starts with <code class="code">s0</code>.<br>
+</div>
+<pre><span id="VALhas_suffix"><span class="keyword">val</span> has_suffix</span> : <code class="type"><a href="Bitpath.html#TYPEt">t</a> -> <a href="Bitpath.html#TYPEt">t</a> -> bool</code></pre><div class="info">
+<code class="code">has_suffix s0 s</code> is true iff <code class="code">s</code> ends with <code class="code">s0</code>.<br>
+</div>
+<pre><span id="VALcoprefix_length"><span class="keyword">val</span> coprefix_length</span> : <code class="type"><a href="Bitpath.html#TYPEt">t</a> -> <a href="Bitpath.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">coprefix_length sA sB</code> is the largest <code class="code">n</code> such that
+    <code class="code">get i sA = get i sB</code> for <code class="code">i &lt; n</code>.<br>
+</div>
+<pre><span id="VALcoprefix"><span class="keyword">val</span> coprefix</span> : <code class="type"><a href="Bitpath.html#TYPEt">t</a> -> <a href="Bitpath.html#TYPEt">t</a> -> <a href="Bitpath.html#TYPEt">t</a></code></pre><pre><span id="VALcoslice_length"><span class="keyword">val</span> coslice_length</span> : <code class="type">int -> <a href="Bitpath.html#TYPEt">t</a> -> int -> <a href="Bitpath.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">coslice_length iA sA iB sB</code> is the largest <code class="code">n</code> such that
+    <code class="code">get (iA + i) sA = get (iB + i) sB</code> for <code class="code">i &lt; n</code>.<br>
+</div>
+<pre><span id="VALcat"><span class="keyword">val</span> cat</span> : <code class="type"><a href="Bitpath.html#TYPEt">t</a> -> <a href="Bitpath.html#TYPEt">t</a> -> <a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">cat s0 s1</code> is the concatenation of <code class="code">s0</code> and <code class="code">s1</code>.<br>
+</div>
+<pre><span id="VALmap"><span class="keyword">val</span> map</span> : <code class="type">(bool -> bool) -> <a href="Bitpath.html#TYPEt">t</a> -> <a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+Given <code class="code">s</code> of length <code class="code">n</code>, then <code class="code">map f s</code> is the <code class="code">n</code>-bit string <code class="code">s'</code> such
+    that <code class="code">get i s' = f (get i s)</code> for <code class="code">0 ≤ i &lt; n</code>.<br>
+</div>
+<pre><span id="VALmapi"><span class="keyword">val</span> mapi</span> : <code class="type">(int -> bool -> bool) -> <a href="Bitpath.html#TYPEt">t</a> -> <a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+Given <code class="code">s</code> of length <code class="code">n</code>, then <code class="code">mapi f s</code> is the <code class="code">n</code>-bit string <code class="code">s'</code> such
+    that <code class="code">get i s' = f i (get i s)</code> for <code class="code">0 ≤ i &lt; n</code>.<br>
+</div>
+<pre><span id="VALfold"><span class="keyword">val</span> fold</span> : <code class="type">(bool -> 'a -> 'a) -> <a href="Bitpath.html#TYPEt">t</a> -> 'a -> 'a</code></pre><div class="info">
+Given a string <code class="code">s</code> of length <code class="code">n</code>, <code class="code">fold f s</code> returns
+    <code class="code">f (get (n - 1) s) ∘ ⋯ ∘ f (get 0 s)</code>.<br>
+</div>
+<pre><span id="VALfoldi"><span class="keyword">val</span> foldi</span> : <code class="type">(int -> bool -> 'a -> 'a) -> <a href="Bitpath.html#TYPEt">t</a> -> 'a -> 'a</code></pre><div class="info">
+Given a string <code class="code">s</code> of length <code class="code">n</code>, <code class="code">foldi f s</code> is the function
+    <code class="code">f (n - 1) (get (n - 1) s) ∘ ⋯ ∘ f 0 (get 0 s)</code>.<br>
+</div>
+<pre><span id="VALfoldi8"><span class="keyword">val</span> foldi8</span> : <code class="type">(int -> int -> 'a -> 'a) -> <a href="Bitpath.html#TYPEt">t</a> -> 'a -> 'a</code></pre><div class="info">
+Given a string <code class="code">s</code> of length <code class="code">n</code>, <code class="code">foldi8 f s</code> is the function
+    <code class="code">f (⌈n/8⌉ - 1) (get (⌈n/8⌉ - 1) s) ∘ ⋯ ∘ f 0 (get 0 s)</code>.<br>
+</div>
+<pre><span id="VALfoldi16"><span class="keyword">val</span> foldi16</span> : <code class="type">(int -> int -> 'a -> 'a) -> <a href="Bitpath.html#TYPEt">t</a> -> 'a -> 'a</code></pre><div class="info">
+Given a string <code class="code">s</code> of length <code class="code">n</code>, <code class="code">foldi16 f s</code> is the function
+    <code class="code">f (⌈n/16⌉ - 1) (get (⌈n/16⌉ - 1) s) ∘ ⋯ ∘ f 0 (get 0 s)</code>.<br>
+</div>
+<pre><span id="VALiter"><span class="keyword">val</span> iter</span> : <code class="type">(bool -> unit) -> <a href="Bitpath.html#TYPEt">t</a> -> unit</code></pre><div class="info">
+<code class="code">iter f s</code> calls <code class="code">f</code> on each element of <code class="code">s</code> in order.<br>
+</div>
+<pre><span id="VALiteri"><span class="keyword">val</span> iteri</span> : <code class="type">(int -> bool -> unit) -> <a href="Bitpath.html#TYPEt">t</a> -> unit</code></pre><div class="info">
+<code class="code">iteri f s</code> calls <code class="code">f i (get i s)</code> for <code class="code">0 ≤ i &lt; length s</code> in order.<br>
+</div>
+<pre><span id="VALof_string"><span class="keyword">val</span> of_string</span> : <code class="type">string -> <a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">of_string s</code> interprets a string <code class="code">s</code> of <code class="code">'0'</code> and <code class="code">'1'</code> characters as a
+    bit string.<br>
+</div>
+<pre><span id="VALto_string"><span class="keyword">val</span> to_string</span> : <code class="type"><a href="Bitpath.html#TYPEt">t</a> -> string</code></pre><div class="info">
+<code class="code">to_string s</code> turns <code class="code">s</code> to a textual representation of <code class="code">'0'</code> and <code class="code">'1'</code>
+    characters, starting with the lowest index.<br>
+</div>
+<pre><span id="VALof_hex_string"><span class="keyword">val</span> of_hex_string</span> : <code class="type">?n:int -> string -> <a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">of_hex_string ~n str</code> returns the bitstring described by the hexadecimal
+    string <code class="code">str</code>, clipped to <code class="code">n</code> bits if specified.<br>
+</div>
+<pre><span id="VALto_hex_string"><span class="keyword">val</span> to_hex_string</span> : <code class="type">?n:int -> <a href="Bitpath.html#TYPEt">t</a> -> string</code></pre><div class="info">
+<code class="code">to_hex_string ~n s</code> is the hexadecimal encoding of <code class="code">s</code> padded with zeros
+    to the next quartet, or clipped or padded to <code class="code">n</code> bits if specified.<br>
+</div>
+<pre><span id="VALof_bin_string"><span class="keyword">val</span> of_bin_string</span> : <code class="type">?n:int -> string -> <a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">of_bin_string ~n s8</code> converts an octet string <code class="code">s8</code> to a bit string <code class="code">s1</code>,
+    where <code class="code">get (8*i + j) s1</code> equals bit number <code class="code">7 - j</code> of <code class="code">String.get i s8</code>.
+    The result is clipped or padded with zeros to <code class="code">n</code> bits.<br>
+</div>
+<pre><span id="VALto_bin_string"><span class="keyword">val</span> to_bin_string</span> : <code class="type">?n:int -> <a href="Bitpath.html#TYPEt">t</a> -> string</code></pre><div class="info">
+<code class="code">to_bin_string ~n s</code> converts a bit string to an octet string using the
+    same representation as <code class="code">of_bit_string</code>.  The result it clipped or padded
+    with zeros to <code class="code">(n + 7) / 8</code> octets.<br>
+</div>
+</body></html>

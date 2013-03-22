@@ -1,0 +1,143 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=utf8" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Bitpath.html">
+<link rel="next" href="Bitpath_cover_map.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Index of module types" rel=Appendix href="index_module_types.html">
+<link title="Bitpath" rel="Chapter" href="Bitpath.html">
+<link title="Bitpath_cover" rel="Chapter" href="Bitpath_cover.html">
+<link title="Bitpath_cover_map" rel="Chapter" href="Bitpath_cover_map.html">
+<link title="Bitpath_prereq" rel="Chapter" href="Bitpath_prereq.html"><title>Bitpath_cover</title>
+</head>
+<body>
+<div class="navbar"><a href="Bitpath.html">Previous</a>
+&nbsp;<a href="index.html">Up</a>
+&nbsp;<a href="Bitpath_cover_map.html">Next</a>
+</div>
+<center><h1>Module <a href="type_Bitpath_cover.html">Bitpath_cover</a></h1></center>
+<br>
+<pre><span class="keyword">module</span> Bitpath_cover: <code class="code">sig</code> <a href="Bitpath_cover.html">..</a> <code class="code">end</code></pre><code class="code">Bitpath_cover.t</code> models sets of infinitely long bit-strings which can be
+    described by a finite set of prefixes common to the members.  These sets
+    can also be considered subsets of unit interval [0, 1] in which case
+    prefixes are the leading decimals of the binary representation of
+    members.
+<p>
+
+    In the following we use <code class="code">·</code> to represent concatenation of bit-strings
+    along with regular set operations to describe modelled sets.<br>
+<hr width="100%">
+<pre><span id="TYPEprefix"><span class="keyword">type</span> <code class="type"></code>prefix</span> = <code class="type"><a href="Bitpath.html#TYPEt">Bitpath.t</a></code> </pre>
+<div class="info">
+A prefix is represented by a <code class="code">Bitpath</code>.<br>
+</div>
+
+<pre><span id="TYPEt"><span class="keyword">type</span> <code class="type"></code>t</span> </pre>
+<div class="info">
+The set type.<br>
+</div>
+
+<pre><span id="VALequal"><span class="keyword">val</span> equal</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a> -> bool</code></pre><div class="info">
+<code class="code">equal sA sB</code> is true iff <code class="code">sA</code> and <code class="code">sB</code> contain the same members.<br>
+</div>
+<pre><span id="VALdisjoint"><span class="keyword">val</span> disjoint</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a> -> bool</code></pre><div class="info">
+<code class="code">disjoint sA sB</code> is true iff <code class="code">sA ∩ sB</code> is the empty set.<br>
+</div>
+<pre><span id="VALempty"><span class="keyword">val</span> empty</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a></code></pre><div class="info">
+The empty set.<br>
+</div>
+<pre><span id="VALis_empty"><span class="keyword">val</span> is_empty</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a> -> bool</code></pre><div class="info">
+True on the empty set, false elsewhere.<br>
+</div>
+<pre><span id="VALuniverse"><span class="keyword">val</span> universe</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a></code></pre><div class="info">
+The set containing all infinite bit-strings.<br>
+</div>
+<pre><span id="VALis_universe"><span class="keyword">val</span> is_universe</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a> -> bool</code></pre><div class="info">
+<code class="code">is_universe s</code> is true iff <code class="code">equal s universe</code>.<br>
+</div>
+<pre><span id="VALof_prefix"><span class="keyword">val</span> of_prefix</span> : <code class="type"><a href="Bitpath_cover.html#TYPEprefix">prefix</a> -> <a href="Bitpath_cover.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">of_prefix p</code> is the set of all strings starting with <code class="code">p</code>.<br>
+</div>
+<pre><span id="VALis_prefix"><span class="keyword">val</span> is_prefix</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a> -> bool</code></pre><div class="info">
+True for sets <code class="code">s</code> such that <code class="code">equal s (of_prefix p)</code> for some <code class="code">p</code>.<br>
+</div>
+<pre><span id="VALto_prefix"><span class="keyword">val</span> to_prefix</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEprefix">prefix</a></code></pre><div class="info">
+If <code class="code">is_prefix s</code>, then <code class="code">to_prefix s</code> returns the <code class="code">p</code> such that <code class="code">equal s
+    (of_prefix p)</code>, otherwise it raises <code class="code">Invalid_argument</code>.<br>
+</div>
+<pre><span id="VALpick_first"><span class="keyword">val</span> pick_first</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEprefix">prefix</a></code></pre><div class="info">
+<code class="code">pick_first s</code> returns the lexicographically lowest prefix describing a
+    cover in <code class="code">s</code>.<br>
+</div>
+<pre><span id="VALpick_random"><span class="keyword">val</span> pick_random</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEprefix">prefix</a></code></pre><div class="info">
+<code class="code">pick_random s</code> returns a random prefix of <code class="code">s</code>, using the PRNG from the
+    <code class="code">Random</code> module.<br>
+</div>
+<pre><span id="VALappose"><span class="keyword">val</span> appose</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">appose sA sB</code> is the set whose lower and upper halves are <code class="code">sA</code> and <code class="code">sB</code>
+    shrunk to half their size by prefixing their elements by <code class="code">0</code> and <code class="code">1</code>,
+    respectively.<br>
+</div>
+<pre><span id="VALlower_half"><span class="keyword">val</span> lower_half</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">lower_half s</code> is the set <code class="code">{p | 0·p ∈ s}</code>.<br>
+</div>
+<pre><span id="VALupper_half"><span class="keyword">val</span> upper_half</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">upper_half s</code> is the set <code class="code">{p | 1·p ∈ s}</code>.<br>
+</div>
+<pre><span id="VALunzoom"><span class="keyword">val</span> unzoom</span> : <code class="type"><a href="Bitpath_cover.html#TYPEprefix">prefix</a> -> <a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">unzoom p s</code> is the set <code class="code">{p·p' | p' ∈ s}</code>.<br>
+</div>
+<pre><span id="VALzoom"><span class="keyword">val</span> zoom</span> : <code class="type"><a href="Bitpath_cover.html#TYPEprefix">prefix</a> -> <a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">zoom p s</code> is the set <code class="code">{p' | p·p' ∈ s}</code>.<br>
+</div>
+<pre><span id="VALcover_find"><span class="keyword">val</span> cover_find</span> : <code class="type"><a href="Bitpath_cover.html#TYPEprefix">prefix</a> -> <a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEprefix">prefix</a></code></pre><div class="info">
+<code class="code">cover_find p s</code> returns the cover of <code class="code">p</code> in <code class="code">s</code> or raises Not_found is no
+    such cover exist in <code class="code">s</code>.<br>
+</div>
+<pre><span id="VALadd"><span class="keyword">val</span> add</span> : <code class="type"><a href="Bitpath_cover.html#TYPEprefix">prefix</a> -> <a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">add p s</code> is the union <code class="code">s ∪ of_prefix p</code>.<br>
+</div>
+<pre><span id="VALremove"><span class="keyword">val</span> remove</span> : <code class="type"><a href="Bitpath_cover.html#TYPEprefix">prefix</a> -> <a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">remove p s</code> is the relative complement <code class="code">s ∖ of_prefix p</code>.<br>
+</div>
+<pre><span id="VALintersect"><span class="keyword">val</span> intersect</span> : <code class="type"><a href="Bitpath_cover.html#TYPEprefix">prefix</a> -> <a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">intersect p s</code> is the intersection <code class="code">s ∩ of_prefix p</code>.<br>
+</div>
+<pre><span id="VALmodify"><span class="keyword">val</span> modify</span> : <code class="type"><a href="Bitpath_cover.html#TYPEprefix">prefix</a> -><br>       (<a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a>) -> <a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">modify f p s</code> is the set <code class="code">s ∖ of_prefix p ∪ unzoom (f (zoom s))</code>.<br>
+</div>
+<pre><span id="VALfold"><span class="keyword">val</span> fold</span> : <code class="type">(<a href="Bitpath_cover.html#TYPEprefix">prefix</a> -> 'a -> 'a) -> <a href="Bitpath_cover.html#TYPEt">t</a> -> 'a -> 'a</code></pre><div class="info">
+<code class="code">fold f s</code> is the function <code class="code">f p_(n-1) ∘ ⋯ ∘ f p_0</code> where <code class="code">{p_i}</code> is the
+    minimal set of prefixes which cover <code class="code">s</code>.<br>
+</div>
+<pre><span id="VALiter"><span class="keyword">val</span> iter</span> : <code class="type">(<a href="Bitpath_cover.html#TYPEprefix">prefix</a> -> unit) -> <a href="Bitpath_cover.html#TYPEt">t</a> -> unit</code></pre><div class="info">
+<code class="code">iter f s</code> calls <code class="code">f</code> for each prefix in the minimal cover for <code class="code">s</code>.<br>
+</div>
+<pre><span id="VALcover_card"><span class="keyword">val</span> cover_card</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a> -> int</code></pre><div class="info">
+<code class="code">cover_card s</code> is the cardinality of the minimal set of prefixes which
+    cover of <code class="code">s</code>.<br>
+</div>
+<pre><span id="VALisecn"><span class="keyword">val</span> isecn</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">isecn sA sB</code> is the intersection <code class="code">sA ∩ sB</code>.<br>
+</div>
+<pre><span id="VALunion"><span class="keyword">val</span> union</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">union sA sB</code> is the union <code class="code">sA ∪ sB</code>.<br>
+</div>
+<pre><span id="VALrel_compl"><span class="keyword">val</span> rel_compl</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">rel_compl sC sA</code> is the relative complement <code class="code">sA ∖ sC</code>.<br>
+</div>
+<pre><span id="VALabs_compl"><span class="keyword">val</span> abs_compl</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">abs_compl s</code> is the absolute complement <code class="code">∁ s</code>.<br>
+</div>
+<pre><span id="VALcompl_decomp"><span class="keyword">val</span> compl_decomp</span> : <code class="type"><a href="Bitpath_cover.html#TYPEt">t</a> -> <a href="Bitpath_cover.html#TYPEt">t</a> * <a href="Bitpath_cover.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">compl_decomp s</code> returns a pair <code class="code">(sC, sA)</code> such that <code class="code">s</code> equals <code class="code">sA ∖ sC</code>.
+    The two returned sets will generally have a simler representation than the
+    original set.<br>
+</div>
+</body></html>
