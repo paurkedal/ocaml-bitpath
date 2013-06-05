@@ -16,17 +16,18 @@
 <link title="Bitpath_prereq" rel="Chapter" href="Bitpath_prereq.html"><title>Bitpath_cover_map.Poly</title>
 </head>
 <body>
-<div class="navbar">&nbsp;<a href="Bitpath_cover_map.html">Up</a>
-&nbsp;<a href="Bitpath_cover_map.Make.html">Next</a>
+<div class="navbar">&nbsp;<a class="up" href="Bitpath_cover_map.html" title="Bitpath_cover_map">Up</a>
+&nbsp;<a class="post" href="Bitpath_cover_map.Make.html" title="Bitpath_cover_map.Make">Next</a>
 </div>
-<center><h1>Module <a href="type_Bitpath_cover_map.Poly.html">Bitpath_cover_map.Poly</a></h1></center>
-<br>
-<pre><span class="keyword">module</span> Poly: <code class="code">sig</code> <a href="Bitpath_cover_map.Poly.html">..</a> <code class="code">end</code></pre>The polymorphic API to prefix-maps contains the subset of the operations
+<h1>Module <a href="type_Bitpath_cover_map.Poly.html">Bitpath_cover_map.Poly</a></h1>
+<pre><span class="keyword">module</span> Poly: <code class="code">sig</code> <a href="Bitpath_cover_map.Poly.html">..</a> <code class="code">end</code></pre><div class="info">
+The polymorphic API to prefix-maps contains the subset of the operations
     which do not depend on equality on the codomain.  Note that the API is
     really incomplete, and must be combined with the functor API.  This is
     made possible by the type equality <code class="code">Make(C).t = C.t Poly.t</code>.  The purpose
     of this module is to allow writing polymorphic functions acting on
     pre-constructed maps.<br>
+</div>
 <hr width="100%">
 <pre><span id="TYPEprefix"><span class="keyword">type</span> <code class="type"></code>prefix</span> = <code class="type"><a href="Bitpath.html#TYPEt">Bitpath.t</a></code> </pre>
 

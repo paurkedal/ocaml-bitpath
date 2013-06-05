@@ -16,14 +16,15 @@
 <link title="Bitpath_prereq" rel="Chapter" href="Bitpath_prereq.html"><title>Bitpath</title>
 </head>
 <body>
-<div class="navbar">&nbsp;<a href="index.html">Up</a>
-&nbsp;<a href="Bitpath_cover.html">Next</a>
+<div class="navbar">&nbsp;<a class="up" href="index.html" title="Index">Up</a>
+&nbsp;<a class="post" href="Bitpath_cover.html" title="Bitpath_cover">Next</a>
 </div>
-<center><h1>Module <a href="type_Bitpath.html">Bitpath</a></h1></center>
-<br>
-<pre><span class="keyword">module</span> Bitpath: <code class="code">sig</code> <a href="Bitpath.html">..</a> <code class="code">end</code></pre>The <code class="code">Bitpath</code> module implements strings of booleans.  The bits are
+<h1>Module <a href="type_Bitpath.html">Bitpath</a></h1>
+<pre><span class="keyword">module</span> Bitpath: <code class="code">sig</code> <a href="Bitpath.html">..</a> <code class="code">end</code></pre><div class="info">
+The <code class="code">Bitpath</code> module implements strings of booleans.  The bits are
     compactly represented packed into native words.  Core functions are
     written in C to operate on full words.<br>
+</div>
 <hr width="100%">
 <pre><span id="TYPEt"><span class="keyword">type</span> <code class="type"></code>t</span> </pre>
 <div class="info">
@@ -153,6 +154,14 @@ Given a string <code class="code">s</code> of length <code class="code">n</code>
 </div>
 <pre><span id="VALiteri"><span class="keyword">val</span> iteri</span> : <code class="type">(int -> bool -> unit) -> <a href="Bitpath.html#TYPEt">t</a> -> unit</code></pre><div class="info">
 <code class="code">iteri f s</code> calls <code class="code">f i (get i s)</code> for <code class="code">0 ≤ i &lt; length s</code> in order.<br>
+</div>
+<pre><span id="VALof_array8"><span class="keyword">val</span> of_array8</span> : <code class="type">int array -> <a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">of_array8 xa</code> forms a bitpath by composing the octets from <code class="code">xa</code>, starting
+    with the most significant.<br>
+</div>
+<pre><span id="VALof_array16"><span class="keyword">val</span> of_array16</span> : <code class="type">int array -> <a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
+<code class="code">of_array16 xa</code> forms a bitpath by composing hexadecatets of <code class="code">xa</code>, staring
+    with the most significant.<br>
 </div>
 <pre><span id="VALof_string"><span class="keyword">val</span> of_string</span> : <code class="type">string -> <a href="Bitpath.html#TYPEt">t</a></code></pre><div class="info">
 <code class="code">of_string s</code> interprets a string <code class="code">s</code> of <code class="code">'0'</code> and <code class="code">'1'</code> characters as a

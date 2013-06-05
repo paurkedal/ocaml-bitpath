@@ -17,18 +17,19 @@
 <link title="Bitpath_prereq" rel="Chapter" href="Bitpath_prereq.html"><title>Bitpath_cover_map</title>
 </head>
 <body>
-<div class="navbar"><a href="Bitpath_cover.html">Previous</a>
-&nbsp;<a href="index.html">Up</a>
-&nbsp;<a href="Bitpath_prereq.html">Next</a>
+<div class="navbar"><a class="pre" href="Bitpath_cover.html" title="Bitpath_cover">Previous</a>
+&nbsp;<a class="up" href="index.html" title="Index">Up</a>
+&nbsp;<a class="post" href="Bitpath_prereq.html" title="Bitpath_prereq">Next</a>
 </div>
-<center><h1>Module <a href="type_Bitpath_cover_map.html">Bitpath_cover_map</a></h1></center>
-<br>
-<pre><span class="keyword">module</span> Bitpath_cover_map: <code class="code">sig</code> <a href="Bitpath_cover_map.html">..</a> <code class="code">end</code></pre>The <code class="code">Bitpath_cover_map</code> implements a mappings from sets of infinite
+<h1>Module <a href="type_Bitpath_cover_map.html">Bitpath_cover_map</a></h1>
+<pre><span class="keyword">module</span> Bitpath_cover_map: <code class="code">sig</code> <a href="Bitpath_cover_map.html">..</a> <code class="code">end</code></pre><div class="info">
+The <code class="code">Bitpath_cover_map</code> implements a mappings from sets of infinite
     bit-strings, representable by a finite set of common prefixes.  In other
     words, the domain has the same structure as the sets modelled by
     <code class="code">Bitpath_cover</code>.  Both polymorphic and a functor variants are provided to
     abstract over the codomain, though the former only contains the part of
     the API which do not depend on equality.<br>
+</div>
 <hr width="100%">
 <pre><span class="keyword">module type</span> <a href="Bitpath_cover_map.Equatable.html">Equatable</a> = <code class="code">sig</code> <a href="Bitpath_cover_map.Equatable.html">..</a> <code class="code">end</code></pre><div class="info">
 The signature for types with an equality predicate.

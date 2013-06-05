@@ -17,13 +17,13 @@
 <link title="Bitpath_prereq" rel="Chapter" href="Bitpath_prereq.html"><title>Bitpath_cover</title>
 </head>
 <body>
-<div class="navbar"><a href="Bitpath.html">Previous</a>
-&nbsp;<a href="index.html">Up</a>
-&nbsp;<a href="Bitpath_cover_map.html">Next</a>
+<div class="navbar"><a class="pre" href="Bitpath.html" title="Bitpath">Previous</a>
+&nbsp;<a class="up" href="index.html" title="Index">Up</a>
+&nbsp;<a class="post" href="Bitpath_cover_map.html" title="Bitpath_cover_map">Next</a>
 </div>
-<center><h1>Module <a href="type_Bitpath_cover.html">Bitpath_cover</a></h1></center>
-<br>
-<pre><span class="keyword">module</span> Bitpath_cover: <code class="code">sig</code> <a href="Bitpath_cover.html">..</a> <code class="code">end</code></pre><code class="code">Bitpath_cover.t</code> models sets of infinitely long bit-strings which can be
+<h1>Module <a href="type_Bitpath_cover.html">Bitpath_cover</a></h1>
+<pre><span class="keyword">module</span> Bitpath_cover: <code class="code">sig</code> <a href="Bitpath_cover.html">..</a> <code class="code">end</code></pre><div class="info">
+<code class="code">Bitpath_cover.t</code> models sets of infinitely long bit-strings which can be
     described by a finite set of prefixes common to the members.  These sets
     can also be considered subsets of unit interval [0, 1] in which case
     prefixes are the leading decimals of the binary representation of
@@ -32,6 +32,7 @@
 
     In the following we use <code class="code">·</code> to represent concatenation of bit-strings
     along with regular set operations to describe modelled sets.<br>
+</div>
 <hr width="100%">
 <pre><span id="TYPEprefix"><span class="keyword">type</span> <code class="type"></code>prefix</span> = <code class="type"><a href="Bitpath.html#TYPEt">Bitpath.t</a></code> </pre>
 <div class="info">
