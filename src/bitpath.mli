@@ -1,4 +1,4 @@
-(* Copyright (C) 2012  Petter Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2012--2013  Petter Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -151,6 +151,14 @@ val iter : (bool -> unit) -> t -> unit
 
 val iteri : (int -> bool -> unit) -> t -> unit
 (** [iteri f s] calls [f i (get i s)] for [0 ≤ i < length s] in order. *)
+
+val of_array8 : int array -> t
+(** [of_array8 xa] forms a bitpath by composing the octets from [xa], starting
+    with the most significant. *)
+
+val of_array16 : int array -> t
+(** [of_array16 xa] forms a bitpath by composing hexadecatets of [xa], staring
+    with the most significant. *)
 
 val of_string : string -> t
 (** [of_string s] interprets a string [s] of ['0'] and ['1'] characters as a

@@ -1,4 +1,4 @@
-(* Copyright (C) 2012  Petter Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2012--2013  Petter Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -106,6 +106,10 @@ let foldi16 f s accu =
 let iter f s = for i = 0 to length s - 1 do f (get i s) done
 
 let iteri f s = for i = 0 to length s - 1 do f i (get i s) done
+
+let of_array8 xa = init8 (Array.length xa) (fun i -> xa.(i))
+
+let of_array16 xa = init16 (Array.length xa) (fun i -> xa.(i))
 
 let of_string str =
     let get_bit i =
