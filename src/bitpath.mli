@@ -152,6 +152,12 @@ val iter : (bool -> unit) -> t -> unit
 val iteri : (int -> bool -> unit) -> t -> unit
 (** [iteri f s] calls [f i (get i s)] for [0 ≤ i < length s] in order. *)
 
+val iteri8 : (int -> int -> unit) -> t -> unit
+(** [iteri8 f s] calls [f i (get8 i s)] for [0 ≤ i < length8 s] in order. *)
+
+val iteri16 : (int -> int -> unit) -> t -> unit
+(** [iteri16 f s] calls [f i (get16 i s)] for [0 ≤ i < length16 s] in order. *)
+
 val of_array8 : int array -> t
 (** [of_array8 xa] forms a bitpath by composing the octets from [xa], starting
     with the most significant. *)

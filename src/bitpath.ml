@@ -105,6 +105,8 @@ let foldi16 f s accu =
 
 let iter f s = for i = 0 to length s - 1 do f (get i s) done
 let iteri f s = for i = 0 to length s - 1 do f i (get i s) done
+let iteri8 f s = for i = 0 to length8 s - 1 do f i (get8 i s) done
+let iteri16 f s = for i = 0 to length16 s - 1 do f i (get16 i s) done
 
 let of_array8 xa = init8 (Array.length xa * 8) (fun i -> xa.(i))
 let of_array16 xa = init16 (Array.length xa * 16) (fun i -> xa.(i))
