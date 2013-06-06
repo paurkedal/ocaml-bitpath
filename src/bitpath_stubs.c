@@ -1,4 +1,4 @@
-/* Copyright (C) 2012  Petter Urkedal <paurkedal@gmail.com>
+/* Copyright (C) 2012--2013  Petter Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -378,25 +378,33 @@ camlbitpath_coslice_length(value iA_v, value sA_v, value iB_v, value sB_v)
 value
 camlbitpath_slice(value iL_v, value iU_v, value sA_v)
 {
+    static char errbuf[160 + 3*sizeof(size_t)]; /* NB! Max 2 lines & 2 %zd's */
     CAMLparam3 (sA_v, iL_v, iU_v);
     CAMLlocal1 (s_v);
     size_t iL = Long_val(iL_v);
     size_t iU = Long_val(iU_v);
     size_t nA, n, m;
 
-    if (iL < 0)
-	caml_invalid_argument("Bitstring.slice: negative lower bound");
-    if (iL > iU)
-	caml_invalid_argument("Bitstring.slice: lower bound larger "
-			      "than upper bound.");
+    if (iL < 0) {
+	sprintf(errbuf, "Bitpath.slice: The lower bound %zd is negative.", iL);
+	caml_invalid_argument(errbuf);
+    }
+    if (iL > iU) {
+	sprintf(errbuf, "Bitpath.slice: "
+		"The lower bound %zd larger than the upper bound %zd.", iL, iU);
+	caml_invalid_argument(errbuf);
+    }
 
     if (iL == iU) {
 	assert(_bitpath_empty != Val_unit);
 	CAMLreturn (_bitpath_empty);
     }
     nA = BITPATH(sA_v)->len;
-    if (iU > nA)
-	caml_invalid_argument("Bitstring.slice: Upper bound out of range.");
+    if (iU > nA) {
+	sprintf(errbuf, "Bitpath.slice: "
+		"Upper bound %zd is larger than the length %zd.", iU, nA);
+	caml_invalid_argument(errbuf);
+    }
     if (iL == 0 && iU == nA) CAMLreturn (sA_v);
 
     n = iU - iL;

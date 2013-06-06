@@ -104,12 +104,10 @@ let foldi16 f s accu =
     loop 0 accu
 
 let iter f s = for i = 0 to length s - 1 do f (get i s) done
-
 let iteri f s = for i = 0 to length s - 1 do f i (get i s) done
 
-let of_array8 xa = init8 (Array.length xa) (fun i -> xa.(i))
-
-let of_array16 xa = init16 (Array.length xa) (fun i -> xa.(i))
+let of_array8 xa = init8 (Array.length xa * 8) (fun i -> xa.(i))
+let of_array16 xa = init16 (Array.length xa * 16) (fun i -> xa.(i))
 
 let of_string str =
     let get_bit i =
