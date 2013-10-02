@@ -6,6 +6,7 @@ Authors:	Petter A. Urkedal
 License:	LGPL-3 with OCaml linking exception
 Plugins:	META (0.3)
 BuildTools:	ocamlbuild
+FilesAB:	src/libbitpath.pc.ab
 
 Library bitpath
   Path:		src
@@ -13,6 +14,7 @@ Library bitpath
   CSources:	prereq.h, bitpath.h, bitpath_stubs.c
   CCOpt:	-I../src -Wall -g -O2
   DataFiles:
+    libbitpath.pc ($prefix/lib/pkgconfig),
     prereq.h ($prefix/include/bitpath),
     bitpath.h ($prefix/include/bitpath)
 

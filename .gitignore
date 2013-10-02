@@ -4,6 +4,7 @@
 /src/META
 /src/bitpath.mllib
 /src/bitpath.odocl
+/src/libbitpath.pc
 /src/libbitpath_stubs.clib
 /setup.data
 /setup.log

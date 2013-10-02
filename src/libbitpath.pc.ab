@@ -1,0 +1,7 @@
+prefix=${prefix}
+exec_prefix=${exec_prefix}
+
+Name: ocaml-bitpath C headers
+Description: Low-level access to the ocaml-bitpath objects from C
+Version: ${pkg_version}
+Cflags: -I\${prefix}/include
