@@ -1,5 +1,5 @@
 OASISFormat:	0.3
-Name:		ocaml-bitpath
+Name:		bitpath
 Version:	0.1
 Synopsis:	Bit-strings and related structures
 Authors:	Petter A. Urkedal
