@@ -110,7 +110,7 @@ _bitpath_hash(value s_v)
     a = 0xba5ebee7;
     b = 0xcafebabe;
     c = BITPATH(s_v)->len;
-    for (i = 0; i < m - 2; i += 3) {
+    for (i = 0; i + 2 < m; i += 3) {
 	a += BITPATH(s_v)->arr[i];
 	b += BITPATH(s_v)->arr[i + 1];
 	c += BITPATH(s_v)->arr[i + 2];
