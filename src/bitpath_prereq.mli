@@ -1,4 +1,4 @@
-(* Copyright (C) 2012  Petter Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2012--2016  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -35,10 +35,4 @@ module Char : sig
 
     val hexdigit_of_int : int -> char
     val hexdigit_to_int : char -> int
-end
-
-module String : sig
-    include module type of String
-
-    val init : int -> (int -> char) -> t
 end

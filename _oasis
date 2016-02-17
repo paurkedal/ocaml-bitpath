@@ -10,7 +10,8 @@ FilesAB: src/libbitpath.pc.ab
 
 Library bitpath
   Path: src
-  Modules: Bitpath, Bitpath_cover, Bitpath_cover_map, Bitpath_prereq
+  Modules: Bitpath, Bitpath_cover, Bitpath_cover_map
+  InternalModules: Bitpath_prereq
   CSources: prereq.h, bitpath.h, bitpath_stubs.c
   CCOpt: -I../src -Wall -g -O2
   DataFiles:

@@ -41,12 +41,3 @@ module Char = struct
         if 'A' <= ch && ch <= 'F' then code ch - (0x41 - 10) else
         invalid_arg "Char.hexdigit_to_int: Not a hexadecimal digit."
 end
-
-module String = struct
-    include String
-
-    let init n f =
-        let s = String.create n in
-        for i = 0 to n - 1 do String.unsafe_set s i (f i) done;
-        s
-end
