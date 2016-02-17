@@ -1,0 +1,10 @@
+#directory "_build/src"
+#load "bitpath.cma"
+
+let pp_bitpath fmtr b =
+  Format.pp_print_string fmtr "Bitpath.";
+  Format.pp_print_int fmtr (Bitpath.length b);
+  Format.pp_print_string fmtr "'";
+  Format.pp_print_string fmtr (Bitpath.to_hex_string b);
+  Format.pp_print_string fmtr "";;
+#install_printer pp_bitpath
