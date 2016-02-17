@@ -1,6 +1,6 @@
 OASISFormat: 0.3
 Name: bitpath
-Version: 0.1
+Version: 0.1.1
 Synopsis: Bit-strings and related structures
 Authors: Petter A. Urkedal
 License: LGPL-3 with OCaml linking exception
