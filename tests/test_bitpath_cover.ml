@@ -1,4 +1,4 @@
-(* Copyright (C) 2012  Petter Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2012--2016  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -23,13 +23,13 @@ let random_bitpath n = Bitpath.init n (fun _ -> Random.bool ())
 
 let random_bitpath_cover max_width =
     if max_width = 0 then
-	if Random.bool () then
-	    Bitpath_cover.universe else Bitpath_cover.empty else
+        if Random.bool () then
+            Bitpath_cover.universe else Bitpath_cover.empty else
     let width = Random.int max_width in
     let rec loop n_add s =
-	if n_add = 0 then s else
-	let p = random_bitpath width in
-	loop (n_add - 1) (Bitpath_cover.add p s) in
+        if n_add = 0 then s else
+        let p = random_bitpath width in
+        loop (n_add - 1) (Bitpath_cover.add p s) in
     let n_add = 1 lsl width in
     loop n_add Bitpath_cover.empty
 
@@ -38,16 +38,16 @@ let verbose = ref false
 let show_set sv s =
     if not !verbose then () else
     if true then begin
-	printf "%s = {" sv;
-	let count = ref 0 in
-	Bitpath_cover.iter (fun x ->
-	    if !count > 0 then print_string ", ";
-	    count := !count + 1;
-	    if Bitpath.length x > 0 then print_string (Bitpath.to_string x);
-	    print_char '*') s;
-	printf "}\n"
+        printf "%s = {" sv;
+        let count = ref 0 in
+        Bitpath_cover.iter (fun x ->
+            if !count > 0 then print_string ", ";
+            count := !count + 1;
+            if Bitpath.length x > 0 then print_string (Bitpath.to_string x);
+            print_char '*') s;
+        printf "}\n"
     end else begin
-	printf "%s = " sv; Bitpath_cover.dump stdout s; output_char stdout '\n'
+        printf "%s = " sv; Bitpath_cover.dump stdout s; output_char stdout '\n'
     end;
     flush stdout
 
@@ -60,13 +60,13 @@ let test_one max_width =
     assert (Bitpath_cover.valid sB);
 
     assert (Bitpath_cover.cover_card sA =
-	    Bitpath_cover.fold (fun _ -> (+) 1) sA 0);
+            Bitpath_cover.fold (fun _ -> (+) 1) sA 0);
 
     Bitpath_cover.iter
-	(fun p ->
-	    let p' = random_bitpath 4 in
-	    assert (Bitpath_cover.cover_find (Bitpath.cat p p') sA = p))
-	sA;
+        (fun p ->
+            let p' = random_bitpath 4 in
+            assert (Bitpath_cover.cover_find (Bitpath.cat p p') sA = p))
+        sA;
 
     let sAuB = Bitpath_cover.union sA sB in
     let sAnB = Bitpath_cover.isecn sA sB in
@@ -106,7 +106,7 @@ let test_one max_width =
     assert (sB' === sB);
     assert (sA' === sA);
     assert (Bitpath_cover.rel_compl sAnB sAuB ===
-	    Bitpath_cover.union sAcB sBcA);
+            Bitpath_cover.union sAcB sBcA);
 
     let sN, sP = Bitpath_cover.compl_decomp sA in
     show_set "P" sP;
@@ -115,10 +115,10 @@ let test_one max_width =
     show_set "P ∖ N" sPcN;
     assert (sPcN === sA);
     assert (Bitpath_cover.cover_card sP + Bitpath_cover.cover_card sN <=
-	    Bitpath_cover.cover_card sA)
+            Bitpath_cover.cover_card sA)
 
 let test () =
     Arg.parse [("-v", Arg.Set verbose, "Dump computed values.")] (konst ()) "";
     for testnum = 0 to 999 do
-	test_one (Random.int 12)
+        test_one (Random.int 12)
     done

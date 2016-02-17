@@ -1,4 +1,4 @@
-/* Copyright (C) 2012--2013  Petter Urkedal <paurkedal@gmail.com>
+/* Copyright (C) 2012--2016  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -77,28 +77,28 @@ camlbitpath_compare(value sA_v, value sB_v)
 #if BITPATH_WORD_WIDTH >= 64
 #  define MIX(a, b, c) \
     do { \
-        a -= b + c;  a ^= (c >> 43); \
-        b -= c + a;  b ^= (a <<  9); \
-        c -= a + b;  c ^= (b >>  8); \
-        a -= b + c;  a ^= (c >> 38); \
-        b -= c + a;  b ^= (a << 23); \
-        c -= a + b;  c ^= (b >>  5); \
-        a -= b + c;  a ^= (c >> 35); \
-        b -= c + a;  b ^= (a << 49); \
-        c -= a + b;  c ^= (b >> 11); \
-        a -= b + c;  a ^= (c >> 12); \
-        b -= c + a;  b ^= (a << 18); \
-        c -= a + b;  c ^= (b >> 22); \
+	a -= b + c;  a ^= (c >> 43); \
+	b -= c + a;  b ^= (a <<  9); \
+	c -= a + b;  c ^= (b >>  8); \
+	a -= b + c;  a ^= (c >> 38); \
+	b -= c + a;  b ^= (a << 23); \
+	c -= a + b;  c ^= (b >>  5); \
+	a -= b + c;  a ^= (c >> 35); \
+	b -= c + a;  b ^= (a << 49); \
+	c -= a + b;  c ^= (b >> 11); \
+	a -= b + c;  a ^= (c >> 12); \
+	b -= c + a;  b ^= (a << 18); \
+	c -= a + b;  c ^= (b >> 22); \
     } while (0)
 #else
 #  define MIX(a, b, c) \
     do { \
-        a -= c;  a ^= WORD_ROT(c,  4);  c += b; \
-        b -= a;  b ^= WORD_ROT(a,  6);  a += c; \
-        c -= b;  c ^= WORD_ROT(b,  8);  b += a; \
-        a -= c;  a ^= WORD_ROT(c, 16);  c += b; \
-        b -= a;  b ^= WORD_ROT(a, 19);  a += c; \
-        c -= b;  c ^= WORD_ROT(b,  4);  b += a; \
+	a -= c;  a ^= WORD_ROT(c,  4);  c += b; \
+	b -= a;  b ^= WORD_ROT(a,  6);  a += c; \
+	c -= b;  c ^= WORD_ROT(b,  8);  b += a; \
+	a -= c;  a ^= WORD_ROT(c, 16);  c += b; \
+	b -= a;  b ^= WORD_ROT(a, 19);  a += c; \
+	c -= b;  c ^= WORD_ROT(b,  4);  b += a; \
     } while (0)
 #endif
 

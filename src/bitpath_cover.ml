@@ -1,4 +1,4 @@
-(* Copyright (C) 2012  Petter Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2012--2016  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -95,9 +95,9 @@ let pick_random =
       | Bot -> raise Not_found
       | Top -> Bitpath.empty
       | Y (s0, s1) ->
-	if Random.bool ()
-	then dive (Bitpath.cat p Bitpath.c1) s1
-	else dive (Bitpath.cat p Bitpath.c0) s0
+        if Random.bool ()
+        then dive (Bitpath.cat p Bitpath.c1) s1
+        else dive (Bitpath.cat p Bitpath.c0) s0
       | P (p', s') -> dive (Bitpath.cat p p') s' in
     dive Bitpath.empty
 
@@ -105,29 +105,29 @@ let lower_half = function
   | Bot -> Bot | Top -> Top
   | Y (s, _) -> s
   | P (p, s) -> if Bitpath.get 0 p then Bot else
-		unzoom (Bitpath.suffix 1 p) s
+                unzoom (Bitpath.suffix 1 p) s
 
 let upper_half = function
   | Bot -> Bot | Top -> Top
   | Y (_, s) -> s
   | P (p, s) -> if not (Bitpath.get 0 p) then Bot else
-		unzoom (Bitpath.suffix 1 p) s
+                unzoom (Bitpath.suffix 1 p) s
 
 let zoom pG s =
     let nG = Bitpath.length pG in
     let rec loop iG s =
-	if iG = nG then s else
-	match s with
-	  | Bot -> Bot
-	  | Top -> Top
-	  | Y (s0, s1) ->
-	    loop (iG + 1) (if Bitpath.get iG pG then s1 else s0)
-	  | P (p0, s0) ->
-	    let n0 = Bitpath.length p0 in
-	    let n = Bitpath.coslice_length iG pG 0 p0 in
-	    if n = n0 then loop (iG + n) s0 else
-	    if n = nG - iG then P (Bitpath.slice n n0 p0, s0) else
-	    Bot in
+        if iG = nG then s else
+        match s with
+          | Bot -> Bot
+          | Top -> Top
+          | Y (s0, s1) ->
+            loop (iG + 1) (if Bitpath.get iG pG then s1 else s0)
+          | P (p0, s0) ->
+            let n0 = Bitpath.length p0 in
+            let n = Bitpath.coslice_length iG pG 0 p0 in
+            if n = n0 then loop (iG + n) s0 else
+            if n = nG - iG then P (Bitpath.slice n n0 p0, s0) else
+            Bot in
     loop 0 s
 
 let cover_find pG s =
@@ -136,11 +136,11 @@ let cover_find pG s =
       | Bot -> raise Not_found
       | Top -> Bitpath.prefix iG pG
       | Y (s0, s1) ->
-	if iG = nG then raise Not_found else
-	loop (iG + 1) (if Bitpath.get iG pG then s1 else s0)
+        if iG = nG then raise Not_found else
+        loop (iG + 1) (if Bitpath.get iG pG then s1 else s0)
       | P (p, sI) ->
-	if not (Bitpath.has_slice p iG pG) then raise Not_found else
-	loop (iG + Bitpath.length p) sI in
+        if not (Bitpath.has_slice p iG pG) then raise Not_found else
+        loop (iG + Bitpath.length p) sI in
     loop 0 s
 
 let rec disjoint sA sB = match sA, sB with
@@ -153,25 +153,25 @@ let rec disjoint sA sB = match sA, sB with
 let rec modify pG f s =
     let nG = Bitpath.length pG in
     let rec loop iG s =
-	if iG = nG then f s else
-	match s with
-	  | Bot | Top ->
-	    if Bitpath.get iG pG then appose s (loop (iG + 1) s)
-				   else appose (loop (iG + 1) s) s
-	  | Y (s0, s1) ->
-	    if Bitpath.get iG pG then appose s0 (loop (iG + 1) s1)
-				   else appose (loop (iG + 1) s0) s1
-	  | P (p0, s0) ->
-	    let n0 = Bitpath.length p0 in
-	    let n = Bitpath.coslice_length iG pG 0 p0 in
-	    if n = n0 then unzoom p0 (loop (iG + n) s0) else
-	    let s_new =
-		if iG + n = nG then f (P (Bitpath.slice n n0 p0, s0)) else
-		let s_unm = unzoom (Bitpath.slice (n + 1) n0 p0) s0 in
-		let s_mod = unzoom (Bitpath.slice (iG+n+1) nG pG) (f Bot) in
-		if Bitpath.get n p0 then (appose s_mod s_unm)
-				      else (appose s_unm s_mod) in
-	    unzoom (Bitpath.prefix n p0) s_new in
+        if iG = nG then f s else
+        match s with
+          | Bot | Top ->
+            if Bitpath.get iG pG then appose s (loop (iG + 1) s)
+                                   else appose (loop (iG + 1) s) s
+          | Y (s0, s1) ->
+            if Bitpath.get iG pG then appose s0 (loop (iG + 1) s1)
+                                   else appose (loop (iG + 1) s0) s1
+          | P (p0, s0) ->
+            let n0 = Bitpath.length p0 in
+            let n = Bitpath.coslice_length iG pG 0 p0 in
+            if n = n0 then unzoom p0 (loop (iG + n) s0) else
+            let s_new =
+                if iG + n = nG then f (P (Bitpath.slice n n0 p0, s0)) else
+                let s_unm = unzoom (Bitpath.slice (n + 1) n0 p0) s0 in
+                let s_mod = unzoom (Bitpath.slice (iG+n+1) nG pG) (f Bot) in
+                if Bitpath.get n p0 then (appose s_mod s_unm)
+                                      else (appose s_unm s_mod) in
+            unzoom (Bitpath.prefix n p0) s_new in
     loop 0 s
 
 let add p = modify p (konst Top)
@@ -183,7 +183,7 @@ let fold f =
       | Bot -> ident
       | Top -> f p
       | Y (s0, s1) -> loop (Bitpath.cat p Bitpath.c1) s1
-		   |< loop (Bitpath.cat p Bitpath.c0) s0
+                   |< loop (Bitpath.cat p Bitpath.c0) s0
       | P (p0, s0) -> loop (Bitpath.cat p p0) s0 in
     loop Bitpath.empty
 
@@ -230,9 +230,9 @@ let rec abs_compl = function
   | P (p0, s0) ->
     let n0 = Bitpath.length p0 in
     let rec loop i0 =
-	if i0 = n0 then abs_compl s0 else
-	if Bitpath.get i0 p0 then appose Top (loop (i0 + 1))
-			       else appose (loop (i0 + 1)) Top in
+        if i0 = n0 then abs_compl s0 else
+        if Bitpath.get i0 p0 then appose Top (loop (i0 + 1))
+                               else appose (loop (i0 + 1)) Top in
     loop 0
 
 let rec rel_compl sC sR = match sC, sR with
@@ -254,8 +254,8 @@ let rec compl_decomp = function
     let sC = appose sC0 sC1 in
     let sA = appose (abs_compl s0) (abs_compl s1) in
     if cover_card sR + cover_card sC <= 1 + cover_card sA
-	then (sC, sR)
-	else (sA, Top)
+        then (sC, sR)
+        else (sA, Top)
   | P (p0, s0) ->
     let sC0, sR0 = compl_decomp s0 in
     (unzoom p0 sC0, unzoom p0 sR0)

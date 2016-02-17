@@ -1,4 +1,4 @@
-(* Copyright (C) 2012--2013  Petter Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2012--2016  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -78,29 +78,29 @@ let mapi f s = init (length s) (fun i -> f i (get i s))
 let fold f s accu =
     let n = length s in
     let rec loop i accu =
-	if i = n then accu else
-	loop (i + 1) (f (get i s) accu) in
+        if i = n then accu else
+        loop (i + 1) (f (get i s) accu) in
     loop 0 accu
 
 let foldi f s accu =
     let n = length s in
     let rec loop i accu =
-	if i = n then accu else
-	loop (i + 1) (f i (get i s) accu) in
+        if i = n then accu else
+        loop (i + 1) (f i (get i s) accu) in
     loop 0 accu
 
 let foldi8 f s accu =
     let n = length8 s in
     let rec loop i accu =
-	if i = n then accu else
-	loop (i + 1) (f i (get8 i s) accu) in
+        if i = n then accu else
+        loop (i + 1) (f i (get8 i s) accu) in
     loop 0 accu
 
 let foldi16 f s accu =
     let n = length16 s in
     let rec loop i accu =
-	if i = n then accu else
-	loop (i + 1) (f i (get16 i s) accu) in
+        if i = n then accu else
+        loop (i + 1) (f i (get16 i s) accu) in
     loop 0 accu
 
 let iter f s = for i = 0 to length s - 1 do f (get i s) done
@@ -113,10 +113,10 @@ let of_array16 xa = init16 (Array.length xa * 16) (fun i -> xa.(i))
 
 let of_string str =
     let get_bit i =
-	match str.[i] with
-	  | '0' -> false
-	  | '1' -> true
-	  | _ -> invalid_arg "Bitpath.of_string" in
+        match str.[i] with
+          | '0' -> false
+          | '1' -> true
+          | _ -> invalid_arg "Bitpath.of_string" in
     if str = "ε" then empty else
     init (String.length str) get_bit
 
@@ -138,18 +138,18 @@ let of_hex_string ?n str =
     let m = String.length str in
     let n = Option.default (m * 4) n in
     let get_octet i =
-	if 2*i + 1 < m then
-	    16 * Char.hexdigit_to_int str.[2*i]
-	       + Char.hexdigit_to_int str.[2*i + 1] else
-	if 2*i < m then
-	    16 * Char.hexdigit_to_int str.[2*i] else
-	0 in
+        if 2*i + 1 < m then
+            16 * Char.hexdigit_to_int str.[2*i]
+               + Char.hexdigit_to_int str.[2*i + 1] else
+        if 2*i < m then
+            16 * Char.hexdigit_to_int str.[2*i] else
+        0 in
     init8 n get_octet
 
 let to_hex_string ?n s =
     let ns = length s in
     let put_quartet i =
-	let x = if (4 * i) >= ns then 0 else
-		get8 (i / 2) s lsr (4*(1 - i mod 2)) land 15 in
-	Char.hexdigit_of_int x in
+        let x = if (4 * i) >= ns then 0 else
+                get8 (i / 2) s lsr (4*(1 - i mod 2)) land 15 in
+        Char.hexdigit_of_int x in
     String.init ((Option.default ns n + 3) / 4) put_quartet

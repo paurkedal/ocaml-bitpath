@@ -1,4 +1,4 @@
-(* Copyright (C) 2012  Petter Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2012--2016  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -27,14 +27,14 @@ let random_bitstring n = Bitpath.init n (fun _ -> Random.bool ())
 
 let random_bitpath_cover_map max_width =
     if max_width = 0 then
-	if Random.bool () then Ipm.const 0 else Ipm.empty else
+        if Random.bool () then Ipm.const 0 else Ipm.empty else
     let width = Random.int max_width in
     let n_add = 1 lsl width in
     let n_val = 3 * n_add / 2 + 1 in
     let rec loop n_add s =
-	if n_add = 0 then s else
-	let p = random_bitstring width in
-	loop (n_add - 1) (Ipm.add p (Random.int n_val) s) in
+        if n_add = 0 then s else
+        let p = random_bitstring width in
+        loop (n_add - 1) (Ipm.add p (Random.int n_val) s) in
     loop n_add Ipm.empty
 
 let verbose = ref false
@@ -42,15 +42,15 @@ let verbose = ref false
 let show_map sv s =
     if not !verbose then () else
     begin
-	printf "%s = {" sv;
-	let count = ref 0 in
-	Ipm.iteri (fun p x ->
-	    if !count > 0 then print_string ", ";
-	    count := !count + 1;
-	    if Bitpath.length p > 0 then print_string (Bitpath.to_string p);
-	    print_string "* ↦ ";
-	    print_int x) s;
-	printf "}\n"
+        printf "%s = {" sv;
+        let count = ref 0 in
+        Ipm.iteri (fun p x ->
+            if !count > 0 then print_string ", ";
+            count := !count + 1;
+            if Bitpath.length p > 0 then print_string (Bitpath.to_string p);
+            print_string "* ↦ ";
+            print_int x) s;
+        printf "}\n"
     end;
     flush stdout
 
@@ -78,7 +78,7 @@ let test_one max_width =
     assert (Ipm.unzoom p (Ipm.zoom p sA) === Ipm.intersect p sA);
 
     assert (Ipm.intersect p sA ===
-	    Ipm.right_isecn (Ipm.unzoom p (Ipm.const 0)) sA);
+            Ipm.right_isecn (Ipm.unzoom p (Ipm.const 0)) sA);
     assert (Ipm.disjoint (Ipm.remove p sA) (Ipm.intersect p sA));
 
     let sAuB = Ipm.right_union sA sB in
@@ -114,10 +114,10 @@ let test () =
     assert (Ipm.to_const const1 == 1);
     assert (Ipm.appose const2 const2 === const2);
     assert (Ipm.appose Ipm.empty const1 ===
-	    Ipm.unzoom (Bitpath.const 1 true) const1);
+            Ipm.unzoom (Bitpath.const 1 true) const1);
     assert (Ipm.cover_card Ipm.empty == 0);
     assert (Ipm.cover_card const2 == 1);
 
     for testnum = 0 to 999 do
-	test_one (Random.int 12)
+        test_one (Random.int 12)
     done
