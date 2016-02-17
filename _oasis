@@ -1,38 +1,38 @@
-OASISFormat:	0.3
-Name:		bitpath
-Version:	0.1
-Synopsis:	Bit-strings and related structures
-Authors:	Petter A. Urkedal
-License:	LGPL-3 with OCaml linking exception
-Plugins:	META (0.3)
-BuildTools:	ocamlbuild
-FilesAB:	src/libbitpath.pc.ab
+OASISFormat: 0.3
+Name: bitpath
+Version: 0.1
+Synopsis: Bit-strings and related structures
+Authors: Petter A. Urkedal
+License: LGPL-3 with OCaml linking exception
+Plugins: DevFiles (0.3), META (0.3)
+BuildTools: ocamlbuild
+FilesAB: src/libbitpath.pc.ab
 
 Library bitpath
-  Path:		src
-  Modules:	Bitpath, Bitpath_cover, Bitpath_cover_map, Bitpath_prereq
-  CSources:	prereq.h, bitpath.h, bitpath_stubs.c
-  CCOpt:	-I../src -Wall -g -O2
+  Path: src
+  Modules: Bitpath, Bitpath_cover, Bitpath_cover_map, Bitpath_prereq
+  CSources: prereq.h, bitpath.h, bitpath_stubs.c
+  CCOpt: -I../src -Wall -g -O2
   DataFiles:
     libbitpath.pc ($prefix/lib/pkgconfig),
     prereq.h ($prefix/include/bitpath),
     bitpath.h ($prefix/include/bitpath)
 
 Document bitpath
-  Title:	The Bitpath Library Reference
-  Type:		ocamlbuild (0.3)
-  InstallDir:	$htmldir/html
-  BuildTools+:	ocamldoc
+  Title: The Bitpath Library Reference
+  Type: ocamlbuild (0.3)
+  InstallDir: $htmldir/html
+  BuildTools+: ocamldoc
   XOCamlbuildPath: src
   XOCamlbuildLibraries: bitpath
-  DataFiles:	COPYING ($docdir), COPYING.LESSER ($docdir), README.mkd ($docdir)
+  DataFiles: COPYING ($docdir), COPYING.LESSER ($docdir), README.mkd ($docdir)
 
 Executable testsuite
-  Install:	false
-  Path:		tests
-  MainIs:	testsuite.ml
-  BuildDepends:	bitpath, oUnit
-  DllPath:	_build/src
+  Install: false
+  Path: tests
+  MainIs: testsuite.ml
+  BuildDepends: bitpath, oUnit
+  DllPath: _build/src
 
 Test "main"
   Type: Custom (0.3)

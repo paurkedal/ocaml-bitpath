@@ -1,6 +1,11 @@
+*.byte
+*.docdir
+*.native
+/Makefile
 /_build
 /_tags
 /bitpath.docdir
+/configure
 /src/META
 /src/bitpath.mllib
 /src/bitpath.odocl
