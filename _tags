@@ -1,0 +1,2 @@
+"src": include
+"src/bitpath_stubs.c": cdep(src/bitpath.h), cdep(src/bitpath_prereq.h)

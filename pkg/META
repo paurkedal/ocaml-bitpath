@@ -1,0 +1,8 @@
+description = "Bit-strings and related structures"
+version = "%%VERSION_NUM%%"
+requires = ""
+archive(byte) = "bitpath.cma"
+archive(native) = "bitpath.cmxa"
+plugin(byte) = "bitpath.cma"
+plugin(native) = "bitpath.cmxs"
+exists_if = "bitpath.cma"

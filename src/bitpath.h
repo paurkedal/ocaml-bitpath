@@ -1,4 +1,4 @@
-/* Copyright (C) 2012  Petter Urkedal <paurkedal@gmail.com>
+/* Copyright (C) 2012--2016  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,7 +17,7 @@
 #ifndef BITPATH_H
 #define BITPATH_H
 
-#include "prereq.h"
+#include "bitpath_prereq.h"
 #include <limits.h>
 #include <stdint.h>
 #include <stdlib.h>
