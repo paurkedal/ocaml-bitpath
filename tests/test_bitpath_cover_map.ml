@@ -111,7 +111,7 @@ let test () =
   assert (not (const0 === const1));
   assert (not (Ipm.is_const Ipm.empty));
   assert (Ipm.is_const const1);
-  assert (Ipm.to_const const1 == 1);
+  assert (Ipm.value const1 = Some 1);
   assert (Ipm.appose const2 const2 === const2);
   assert (Ipm.appose Ipm.empty const1 ===
           Ipm.unzoom (Bitpath.const 1 true) const1);

@@ -45,7 +45,7 @@ module Poly : sig
 
   val const : 'a -> 'a t
   val is_const : 'a t -> bool
-  val to_const : 'a t -> 'a
+  val value : 'a t -> 'a option
   val picki_first : 'a t -> prefix * 'a
   val picki_random : 'a t -> prefix * 'a
 
@@ -66,6 +66,9 @@ module Poly : sig
 
   val iter : ('a -> unit) -> 'a t -> unit
   val iteri : (prefix -> 'a -> unit) -> 'a t -> unit
+
+  (**/**)
+  val to_const : 'a t -> 'a [@@deprecated "Use value."]
 end
 
 (** A functor which implements the full API of prefix-maps, given an equatable
@@ -98,8 +101,9 @@ module Make (C : Equatable) : sig
   val is_const : t -> bool
   (** [is_const m] iff [equal m (const v)] for some [v]. *)
 
-  val to_const : t -> codomain
-  (** If [m] is [const v] for some [v] then [to_const m] is [v]. *)
+  val value : t -> codomain option
+  (** [value v] is [Some v] if [equal m (const v)] for some [v], otherwise
+      [None]. *)
 
   val picki_first : t -> prefix * codomain
   val picki_random : t -> prefix * codomain
@@ -153,4 +157,5 @@ module Make (C : Equatable) : sig
 
   (**/**)
   val valid : t -> bool
+  val to_const : t -> codomain [@@deprecated "Use value."]
 end

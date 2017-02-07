@@ -46,6 +46,9 @@ module Poly = struct
   let to_const = function
    | U x -> x
    | _ -> invalid_arg "Bitpath_cover_map.to_const"
+  let value = function
+   | U x -> Some x
+   | _ -> None
 
   let picki_first m =
     let rec dive p = function
@@ -188,6 +191,7 @@ module Make (C : Equatable) = struct
   let const = const
   let is_const = is_const
   let to_const = to_const
+  let value = value
   let picki_first = picki_first
   let picki_random = picki_random
   let lower_half = lower_half
