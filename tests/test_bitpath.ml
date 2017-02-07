@@ -1,4 +1,4 @@
-(* Copyright (C) 2012--2016  Petter A. Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2012--2017  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -54,15 +54,15 @@ let test_one () =
     assert (Bitpath.bitnot (Bitpath.bitnot bs) = bs);
 
     for i = 0 to n - 1 do
-        assert (Bitpath.get i bs = Array.get data i);
-        assert (Bitpath.get i bs8 = Array.get data i);
-        assert (Bitpath.get i bs16 = Array.get data i)
+        assert (Bitpath.get bs i = Array.get data i);
+        assert (Bitpath.get bs8 i = Array.get data i);
+        assert (Bitpath.get bs16 i = Array.get data i)
     done;
     for i = 0 to (n + 7) / 8 - 1 do
-        assert (Bitpath.get8 i bs = bool_array_get8 i data)
+        assert (Bitpath.get8 bs i = bool_array_get8 i data)
     done;
     for i = 0 to (n + 15) / 16 - 1 do
-        assert (Bitpath.get16 i bs = bool_array_get16 i data)
+        assert (Bitpath.get16 bs i = bool_array_get16 i data)
     done;
 
     let i_r = ref 0 in

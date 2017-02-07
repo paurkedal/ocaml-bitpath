@@ -1,4 +1,4 @@
-(* Copyright (C) 2012--2016  Petter A. Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2012--2017  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -69,13 +69,13 @@ module Poly = struct
       | E -> E
       | U c -> U c
       | Y (m, _) -> m
-      | P (p, m) -> if Bitpath.get 0 p then E else
+      | P (p, m) -> if Bitpath.get p 0 then E else
                     unzoom (Bitpath.suffix 1 p) m
     let upper_half = function
       | E -> E
       | U c -> U c
       | Y (_, m) -> m
-      | P (p, m) -> if not (Bitpath.get 0 p) then E else 
+      | P (p, m) -> if not (Bitpath.get p 0) then E else
                     unzoom (Bitpath.suffix 1 p) m
 
     let rec zoom pG m =
@@ -86,7 +86,7 @@ module Poly = struct
               | E -> E
               | U x -> U x
               | Y (mL, mR) ->
-                loop (iG + 1) (if Bitpath.get iG pG then mR else mL)
+                loop (iG + 1) (if Bitpath.get pG iG then mR else mL)
               | P (p', m') ->
                 let n' = Bitpath.length p' in
                 let n = Bitpath.coslice_length iG pG 0 p' in
@@ -102,7 +102,7 @@ module Poly = struct
           | U x -> Bitpath.prefix iG pG
           | Y (m0, m1) ->
             if iG = nG then raise Not_found else
-            loop (iG + 1) (if Bitpath.get iG pG then m1 else m0)
+            loop (iG + 1) (if Bitpath.get pG iG then m1 else m0)
           | P (p, mI) ->
             if not (Bitpath.has_slice p iG pG) then raise Not_found else
             loop (iG + Bitpath.length p) mI in
@@ -119,16 +119,16 @@ module Poly = struct
         let nG = Bitpath.length pG in
         let rec remove_uniform m iG =
             if iG = nG then E else
-            if Bitpath.get iG pG then Y (m, remove_uniform m (iG + 1))
-                                   else Y (remove_uniform m (iG + 1), m) in
+            if Bitpath.get pG iG then Y (m, remove_uniform m (iG + 1))
+                                 else Y (remove_uniform m (iG + 1), m) in
         let rec loop iG m =
             if iG = nG then m else
             match m with
               | E -> E
               | U c -> remove_uniform m iG
               | Y (mL, mR) ->
-                if Bitpath.get iG pG then Y (mL, loop (iG + 1) mR)
-                                       else Y (loop (iG + 1) mL, mR)
+                if Bitpath.get pG iG then Y (mL, loop (iG + 1) mR)
+                                     else Y (loop (iG + 1) mL, mR)
               | P (p', m') ->
                 if Bitpath.has_slice p' iG pG
                 then unzoom p' (loop (iG + Bitpath.length p') m')
@@ -223,11 +223,11 @@ module Make (C : Equatable) = struct
             if iG = nG then f m else
             match m with
               | E | U _ ->
-                if Bitpath.get iG pG then appose m (loop (iG + 1) m)
-                                       else appose (loop (iG + 1) m) m
+                if Bitpath.get pG iG then appose m (loop (iG + 1) m)
+                                     else appose (loop (iG + 1) m) m
               | Y (mL, mR) ->
-                if Bitpath.get iG pG then appose mL (loop (iG + 1) mR)
-                                       else appose (loop (iG + 1) mL) mR
+                if Bitpath.get pG iG then appose mL (loop (iG + 1) mR)
+                                     else appose (loop (iG + 1) mL) mR
               | P (p', m') ->
                 let n' = Bitpath.length p' in
                 let n = Bitpath.coslice_length iG pG 0 p' in
@@ -236,8 +236,8 @@ module Make (C : Equatable) = struct
                     if iG + n = nG then f (P (Bitpath.slice n n' p', m')) else
                     let m_unm = unzoom (Bitpath.slice (n + 1) n' p') m' in
                     let m_mod = unzoom (Bitpath.slice (iG+n+1) nG pG) (f E) in
-                    if Bitpath.get n p' then appose m_mod m_unm
-                                          else appose m_unm m_mod in
+                    if Bitpath.get p' n then appose m_mod m_unm
+                                        else appose m_unm m_mod in
                 unzoom (Bitpath.prefix n p') m_new in
         loop 0 m
 

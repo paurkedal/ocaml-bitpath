@@ -1,4 +1,4 @@
-/* Copyright (C) 2012--2016  Petter A. Urkedal <paurkedal@gmail.com>
+/* Copyright (C) 2012--2017  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -325,21 +325,21 @@ camlbitpath_length(value s_v)
 }
 
 value
-camlbitpath_get(value i_v, value s_v)
+camlbitpath_get(value s_v, value i_v)
 {
     size_t i = Long_val(i_v);
     return Val_bool(BITPATH_GET(i, BITPATH(s_v)));
 }
 
 value
-camlbitpath_get8(value i_v, value s_v)
+camlbitpath_get8(value s_v, value i_v)
 {
     size_t i = Long_val(i_v);
     return Val_int(BITPATH_GET8(i, BITPATH(s_v)));
 }
 
 value
-camlbitpath_get16(value i_v, value s_v)
+camlbitpath_get16(value s_v, value i_v)
 {
     size_t i = Long_val(i_v);
     return Val_int(BITPATH_GET16(i, BITPATH(s_v)));

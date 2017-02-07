@@ -1,4 +1,4 @@
-(* Copyright (C) 2012--2013  Petter Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2012--2017  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -32,14 +32,14 @@ val length8 : t -> int
 val length16 : t -> int
 (** [length16 s = ⌈length s / 16⌉]. *)
 
-external get : int -> t -> bool = "camlbitpath_get"
+external get : t -> int -> bool = "camlbitpath_get"
 (** [get i s] is true iff the [i]th bit of [s] is set. *)
 
-external get8 : int -> t -> int = "camlbitpath_get8"
+external get8 : t -> int -> int = "camlbitpath_get8"
 (** [get8 i s] is the integer with bit number [7 - j] equal to bit number
     [8*i + j] of [s]. *)
 
-external get16 : int -> t -> int = "camlbitpath_get16"
+external get16 : t -> int -> int = "camlbitpath_get16"
 (** [get16 i s] is the integer with bit number [15 - j] equal to bit number
     [16*i + j] of [s]. *)
 
