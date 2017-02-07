@@ -1,4 +1,4 @@
-(* Copyright (C) 2012--2016  Petter A. Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2012--2017  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -25,14 +25,14 @@ val konst : 'a -> 'b -> 'a
 val ( |< ) : ('b -> 'c) -> ('a -> 'b) -> 'a -> 'c
 
 module Option : sig
-    type 'a t = 'a option
+  type 'a t = 'a option
 
-    val default : 'a -> 'a option -> 'a
+  val default : 'a -> 'a option -> 'a
 end
 
 module Char : sig
-    include module type of Char
+  include module type of Char
 
-    val hexdigit_of_int : int -> char
-    val hexdigit_to_int : char -> int
+  val hexdigit_of_int : int -> char
+  val hexdigit_to_int : char -> int
 end

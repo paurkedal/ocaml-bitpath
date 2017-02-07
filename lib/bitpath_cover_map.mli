@@ -1,4 +1,4 @@
-(* Copyright (C) 2012  Petter Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2012--2017  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -23,8 +23,8 @@
 
 (** The signature for types with an equality predicate. *)
 module type Equatable = sig
-    type t
-    val equal : t -> t -> bool
+  type t
+  val equal : t -> t -> bool
 end
 
 (** The polymorphic API to prefix-maps contains the subset of the operations
@@ -35,83 +35,83 @@ end
     pre-constructed maps. *)
 module Poly : sig
 
-    type prefix = Bitpath.t
-    type 'a t
+  type prefix = Bitpath.t
+  type 'a t
 
-    val empty : 'a t
-    val is_empty : 'a t -> bool
+  val empty : 'a t
+  val is_empty : 'a t -> bool
 
-    val const : 'a -> 'a t
-    val is_const : 'a t -> bool
-    val to_const : 'a t -> 'a
-    val picki_first : 'a t -> prefix * 'a
-    val picki_random : 'a t -> prefix * 'a
+  val const : 'a -> 'a t
+  val is_const : 'a t -> bool
+  val to_const : 'a t -> 'a
+  val picki_first : 'a t -> prefix * 'a
+  val picki_random : 'a t -> prefix * 'a
 
-    val lower_half : 'a t -> 'a t
-    val upper_half : 'a t -> 'a t
+  val lower_half : 'a t -> 'a t
+  val upper_half : 'a t -> 'a t
 
-    val unzoom : prefix -> 'a t -> 'a t
-    val zoom : prefix -> 'a t -> 'a t
-    val cover_find : prefix -> 'a t -> prefix
+  val unzoom : prefix -> 'a t -> 'a t
+  val zoom : prefix -> 'a t -> 'a t
+  val cover_find : prefix -> 'a t -> prefix
 
-    val remove : prefix -> 'a t -> 'a t
-    val intersect : prefix -> 'a t -> 'a t
+  val remove : prefix -> 'a t -> 'a t
+  val intersect : prefix -> 'a t -> 'a t
 
-    val cover_card : 'a t -> int
+  val cover_card : 'a t -> int
 
-    val fold : ('a -> 'b -> 'b) -> 'a t -> 'b -> 'b
-    val foldi : (prefix -> 'a -> 'b -> 'b) -> 'a t -> 'b -> 'b
+  val fold : ('a -> 'b -> 'b) -> 'a t -> 'b -> 'b
+  val foldi : (prefix -> 'a -> 'b -> 'b) -> 'a t -> 'b -> 'b
 
-    val iter : ('a -> unit) -> 'a t -> unit
-    val iteri : (prefix -> 'a -> unit) -> 'a t -> unit
+  val iter : ('a -> unit) -> 'a t -> unit
+  val iteri : (prefix -> 'a -> unit) -> 'a t -> unit
 end
 
 (** A functor which implements the full API of prefix-maps, given an equatable
     type for the codomain. *)
 module Make (C : Equatable) : sig
 
-    type prefix = Bitpath.t
-    type codomain = C.t
-    type t = codomain Poly.t
+  type prefix = Bitpath.t
+  type codomain = C.t
+  type t = codomain Poly.t
 
-    val equal : t -> t -> bool
-    val disjoint : t -> t -> bool
+  val equal : t -> t -> bool
+  val disjoint : t -> t -> bool
 
-    val empty : t
-    val is_empty : t -> bool
+  val empty : t
+  val is_empty : t -> bool
 
-    val const : codomain -> t
-    val is_const : t -> bool
-    val to_const : t -> codomain
-    val picki_first : t -> prefix * codomain
-    val picki_random : t -> prefix * codomain
+  val const : codomain -> t
+  val is_const : t -> bool
+  val to_const : t -> codomain
+  val picki_first : t -> prefix * codomain
+  val picki_random : t -> prefix * codomain
 
-    val appose : t -> t -> t
-    val lower_half : t -> t
-    val upper_half : t -> t
+  val appose : t -> t -> t
+  val lower_half : t -> t
+  val upper_half : t -> t
 
-    val unzoom : prefix -> t -> t
-    val zoom : prefix -> t -> t
-    val cover_find : prefix -> t -> prefix
+  val unzoom : prefix -> t -> t
+  val zoom : prefix -> t -> t
+  val cover_find : prefix -> t -> prefix
 
-    val add : prefix -> codomain -> t -> t
-    val remove : prefix -> t -> t
-    val intersect : prefix -> t -> t
-    val modify : prefix -> (t -> t) -> t -> t
+  val add : prefix -> codomain -> t -> t
+  val remove : prefix -> t -> t
+  val intersect : prefix -> t -> t
+  val modify : prefix -> (t -> t) -> t -> t
 
-    val cover_card : t -> int
+  val cover_card : t -> int
 
-    val fold : (codomain -> 'a -> 'a) -> t -> 'a -> 'a
-    val foldi : (prefix -> codomain -> 'a -> 'a) -> t -> 'a -> 'a
+  val fold : (codomain -> 'a -> 'a) -> t -> 'a -> 'a
+  val foldi : (prefix -> codomain -> 'a -> 'a) -> t -> 'a -> 'a
 
-    val iter : (codomain -> unit) -> t -> unit
-    val iteri : (prefix -> codomain -> unit) -> t -> unit
+  val iter : (codomain -> unit) -> t -> unit
+  val iteri : (prefix -> codomain -> unit) -> t -> unit
 
-    val map : ('a -> codomain) -> 'a Poly.t -> t
-    val mapi : (prefix -> 'a -> codomain) -> 'a Poly.t -> t
+  val map : ('a -> codomain) -> 'a Poly.t -> t
+  val mapi : (prefix -> 'a -> codomain) -> 'a Poly.t -> t
 
-    val right_isecn : t -> t -> t
-    val right_union : t -> t -> t
+  val right_isecn : t -> t -> t
+  val right_union : t -> t -> t
 
-    val valid : t -> bool
+  val valid : t -> bool
 end

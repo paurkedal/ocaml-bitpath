@@ -1,4 +1,4 @@
-(* Copyright (C) 2012--2016  Petter A. Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2012--2017  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -19,25 +19,25 @@ let konst x y = x
 let ( |< ) f g x = f (g x)
 
 module Option = struct
-    type 'a t = 'a option
+  type 'a t = 'a option
 
-    let default x0 = function
-      | None -> x0
-      | Some x -> x
+  let default x0 = function
+   | None -> x0
+   | Some x -> x
 end
 
 module Char = struct
-    include Char
+  include Char
 
-    let hexdigit_of_int i =
-        if i < 0 then invalid_arg"Char.hexdigit_of_int: Negative argument." else
-        if i < 10 then chr (i + 0x30) else
-        if i < 16 then chr (i + (0x61 - 10)) else
-        invalid_arg "Char.hexdigit_of_int: Argument greater that 16."
+  let hexdigit_of_int i =
+    if i < 0 then invalid_arg"Char.hexdigit_of_int: Negative argument." else
+    if i < 10 then chr (i + 0x30) else
+    if i < 16 then chr (i + (0x61 - 10)) else
+    invalid_arg "Char.hexdigit_of_int: Argument greater that 16."
 
-    let hexdigit_to_int ch =
-        if '0' <= ch && ch <= '9' then code ch - 0x30 else
-        if 'a' <= ch && ch <= 'f' then code ch - (0x61 - 10) else
-        if 'A' <= ch && ch <= 'F' then code ch - (0x41 - 10) else
-        invalid_arg "Char.hexdigit_to_int: Not a hexadecimal digit."
+  let hexdigit_to_int ch =
+    if '0' <= ch && ch <= '9' then code ch - 0x30 else
+    if 'a' <= ch && ch <= 'f' then code ch - (0x61 - 10) else
+    if 'A' <= ch && ch <= 'F' then code ch - (0x41 - 10) else
+    invalid_arg "Char.hexdigit_to_int: Not a hexadecimal digit."
 end
