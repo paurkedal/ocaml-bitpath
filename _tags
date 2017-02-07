@@ -1,2 +1,2 @@
-"src": include
-"src/bitpath_stubs.c": cdep(src/bitpath.h), cdep(src/bitpath_prereq.h)
+"lib": include
+"lib/bitpath_stubs.c": cdep(lib/bitpath.h), cdep(lib/bitpath_prereq.h)
