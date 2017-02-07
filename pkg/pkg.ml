@@ -11,4 +11,5 @@ let () = Pkg.describe ~licenses "bitpath" @@ fun c ->
     Pkg.clib "lib/libbitpath_stubs.clib";
     Pkg.lib "lib/bitpath_prereq.h";
     Pkg.lib "lib/bitpath.h";
+    Pkg.test "tests/testsuite";
   ]
