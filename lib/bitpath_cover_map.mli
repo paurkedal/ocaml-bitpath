@@ -32,7 +32,9 @@ end
     really incomplete, and must be combined with the functor API.  This is
     made possible by the type equality [Make(C).t = C.t Poly.t].  The purpose
     of this module is to allow writing polymorphic functions acting on
-    pre-constructed maps. *)
+    pre-constructed maps.
+
+    See {!Make} for documentation. *)
 module Poly : sig
 
   type prefix = Bitpath.t
@@ -75,31 +77,67 @@ module Make (C : Equatable) : sig
   type t = codomain Poly.t
 
   val equal : t -> t -> bool
+  (** [equal mA mB] is true iff for any prefix [p] such that [zoom p sA] and
+      [zoom p sB] are both constant, [C.equal (to_const p mA)
+      (to_const p mB)]. *)
+
   val disjoint : t -> t -> bool
+  (** [disjoint mA mB] is true iff [mA] and [mB] have no overlapping keys. *)
 
   val empty : t
+  (** [empty] is the unique map fulfilling [is_empty empty]. Also, [equal (zoom
+      p empty) empty] for any prefix [p]. *)
+
   val is_empty : t -> bool
+  (** [is_empty m] is true iff [m] is the unique empty map. *)
 
   val const : codomain -> t
+  (** [const v] is the unique map [m] such that [is_const m] and [to_const m =
+      v]. Also, [equal (zoom p m) m] for any prefix [p]. *)
+
   val is_const : t -> bool
+  (** [is_const m] iff [equal m (const v)] for some [v]. *)
+
   val to_const : t -> codomain
+  (** If [m] is [const v] for some [v] then [to_const m] is [v]. *)
+
   val picki_first : t -> prefix * codomain
   val picki_random : t -> prefix * codomain
 
   val appose : t -> t -> t
+  (** [appose mA mB] is [{0·p ↦ x | p ↦ x ∈ mA} ∪ {1·p ↦ x | p ↦ x ∈ mB}] *)
+
   val lower_half : t -> t
+  (** [lower_half m] is [{p ↦ x | 0·p ↦ x ∈ m}]. *)
+
   val upper_half : t -> t
+  (** [upper_half m] is [{p ↦ x | 1·p ↦ x ∈ m}]. *)
 
   val unzoom : prefix -> t -> t
+  (** [unzoom p m] is [{p·p' ↦ x | p' ↦ x ∈ m}]. *)
+
   val zoom : prefix -> t -> t
+  (** [zoom p m] is [{p' ↦ x | p·p' ↦ x ∈ m}]. *)
+
   val cover_find : prefix -> t -> prefix
 
   val add : prefix -> codomain -> t -> t
+  (** [add p x m] is the map [m] with keys starting with [p] replaced by a
+      uniform mapping to [x]. *)
+
   val remove : prefix -> t -> t
+  (** [remove p m] is the restriction of [m] to keys not starting with [p]. *)
+
   val intersect : prefix -> t -> t
+  (** [intersect p m] is the restriction of [m] to keys starting with [p]. *)
+
   val modify : prefix -> (t -> t) -> t -> t
+  (** [modify p f m] agrees with [m] everywhere except that the submap [m']
+      under [p] is replaced by [f m']. *)
 
   val cover_card : t -> int
+  (** [cover_card m] is the mimimum number of pairs [(pi, xi)] such that [m =
+      {pi ↦ xi | i}]. *)
 
   val fold : (codomain -> 'a -> 'a) -> t -> 'a -> 'a
   val foldi : (prefix -> codomain -> 'a -> 'a) -> t -> 'a -> 'a
@@ -113,5 +151,6 @@ module Make (C : Equatable) : sig
   val right_isecn : t -> t -> t
   val right_union : t -> t -> t
 
+  (**/**)
   val valid : t -> bool
 end
