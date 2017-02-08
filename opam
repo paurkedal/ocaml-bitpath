@@ -10,5 +10,6 @@ license: "LGPL-3 with OCaml linking exception"
 build: ["ocaml" "pkg/pkg.ml" "build" "--pinned" "%{pinned}%"]
 depends: [
   "ocamlbuild" {build}
+  "oUnit" {build}
   "topkg" {build}
 ]
