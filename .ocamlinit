@@ -1,4 +1,4 @@
-#directory "_build/src"
+#directory "_build/lib"
 #load "bitpath.cma"
 
 let pp_bitpath fmtr b =
