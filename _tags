@@ -1,3 +1,5 @@
 "lib": include
 "lib/bitpath_stubs.c": cdep(lib/bitpath.h), cdep(lib/bitpath_prereq.h)
-<tests/*>: package(oUnit), linkdep(lib/libbitpath_stubs.a)
+<lib/bitpath.{cma,cmxa}>: use_bitpath_stubs
+<lib/bitpath.cmxs>: link_bitpath_stubs
+<tests/*>: package(oUnit), use_bitpath_stubs
