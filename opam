@@ -1,5 +1,5 @@
 opam-version: "1.2"
-name: "ocaml-bitpath"
+name: "bitpath"
 authors: ["Petter A. Urkedal"]
 maintainer: "paurkedal@gmail.com"
 homepage: "https://github.com/paurkedal/ocaml-bitpath/"
