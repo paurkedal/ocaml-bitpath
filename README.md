@@ -23,20 +23,9 @@ these.
 Build and Install
 =================
 
-The library has not been released yet.
+To install from the author's OPAM repository:
 
-Apart from OCaml 3.12 or later and a C compiler, you need [oUnit][ounit] if
-tests are enabled and [OASIS][oasis] to build from the Git repository.
+    opam repo add paurkedal https://github.com/paurkedal/opam-repo-paurkedal.git
+    opam install bitpath
 
-To build and install the library from the Git repository, run
-
-    oasis setup
-    ocaml setup.ml -configure [...]
-    ocaml setup.ml -build
-    ocaml setup.ml -install
-
-The installed package is named `bitpath` and can be used with `ocamlfind`.
-
-
-[ounit]: http://ounit.forge.ocamlcore.org/
-[oasis]: http://oasis.forge.ocamlcore.org/
+For manual installs, use the `pkg/pkg.ml` script.
